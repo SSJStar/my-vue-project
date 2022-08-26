@@ -1,36 +1,26 @@
 <template>
-  <div id="login" style="width: 100%;height: 100%;background-color: gray;position: relative">
-<!--    position: fixed-->
-<!--    text-align: right;justify-content: flex-end-->
-    <div style="background-color: bisque;width: 100%;height: 100%;position: absolute;">
-      <img src="@/assets/kejiBG.png" style="width: 100%;height: 100%; "/>
-    </div>
-<!--    <img src="@/assets/logo.png" style="width: 20%;height: 20%;position: absolute">-->
-    <div style="background-color:#323bb6;width: 20%;height: 20%; position: absolute;z-index: 1">
+  <div id="login" style="width: 100%;height: 100%;background-color: gray;">
 
-      <h1 class="myH1">欢迎登录</h1>
-      <input ref="uName" placeholder="请输入账号"/><br/>
-      <input ref="pwd" placeholder="请输入密码"/><br/>
-      <button @click="loginActionFunc">确 认</button>
+    <div id="backgroundDIV" >
+      <img src="@/assets/kejiBG.png"/>
+    </div>
+
+    <div id="loginModuleDIV">
+<!--      现在使用的框架是:vue3 + element-plus-->
+      <h1 class="loginModuleDIV-title">欢迎登录</h1>
+      <h2 class="loginModuleDIV-subtitle">第一个Vue3页面</h2>
+      <input ref="uName" id="inputUname" placeholder="请输入账号"/><br/>
+      <input ref="pwd" id="inputPwd" placeholder="请输入密码"/><br/>
+<!--      <button @click="loginActionFunc">确 认</button>-->
+<!--      customBtnAction-->
+      <el-button id="loginModuleDIV-loginButton" type="primary" @click="loginActionFunc">登 录</el-button>
+      <div style="width: 100%;height: auto">
+        <button id="loginModuleDIV-registerButton" @click="registerActionFunc">注 册</button>
+      </div>
+
     </div>
   </div>
 
-
-
-
-<!--  <div id="outer-div" style="height:80px;width:100px;border: 1px solid red;position: relative;">-->
-<!--    <div id="first-div" style="width:50%;height:100%;border-right: 2px solid #619e38;"></div>-->
-<!--    <div id="cell-icon" style="border:1px solid blue; position: absolute; top: 50%; left: 50%; transform:translate(-50%, -50%); background-color: #fff;z-index:1; ">anFAicon</div>-->
-<!--  </div>-->
-
-
-
-
-<!--  <div class="title clear fwb" style="overflow:hidden;position:relative;width: 100%;height: 100%;background-color: #42b983">-->
-<!--    <div class="author fl" style="color: red;overflow: hidden;position: absolute;top: 0px;right: 0px;">-->
-<!--      当前在线人数：<label id="onlineusernum"></label>人-->
-<!--    </div>-->
-<!--  </div>-->
 </template>
 
 <script setup>
@@ -83,36 +73,77 @@ import {ref} from 'vue'
 /*  background-color: slategray;*/
 /*}*/
 /* 定义样式：class="myH1" */
-.myH1{
-  color: cadetblue;
+
+
+/* backgroundDIV */
+#backgroundDIV{
+  background-color: bisque;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+#backgroundDIV img{
+  width: 100%;height: 100%;
+}
+
+/* loginModuleDIV 模块 */
+#loginModuleDIV{
+  /*background-color:#323bb6;*/
+
+  /*! autoprefixer: ignore next */
+  background:-webkit-gradient(linear, 100% 0, 0 0, from(rgb(58 96 199)), to(rgb(57 63 187)));
+
+  width: 40%;height: 50%;
+  position: absolute;
+  top: 50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  border-radius: 10px;/*设置四分之一圆角*/
+  border: 0px solid rgb(255,255,255);/* border-radius要配合这句使用，否则输入框会出现内阴影*/
 }
 
 
+.loginModuleDIV-title{
+  color: cadetblue;
+  padding: 0;
+  margin: 40px 0 0 0;
+}
+
+.loginModuleDIV-subtitle{
+  color: cadetblue;
+  padding: 0;
+  margin: 30px 0 0 0;
+}
 
 
+#loginModuleDIV input{
+  width: 90%;
+  height: 40px;
+  border-radius: 10px;/*设置四分之一圆角*/
+  border: 0px solid rgb(255,255,255);/* border-radius要配合这句使用，否则输入框会出现内阴影*/
+}
+#inputUname{
+  margin-top: 40px;
+}
+#inputPwd{
+  margin-top: 20px;
+}
 
+#loginModuleDIV-loginButton{
+ margin-top: 40px;
+  width: 45%;
+  height: 47px;
+}
 
-/*#outer-div {*/
-/*  height:80px;*/
-/*  width:100px;*/
-/*  border: 1px solid red;*/
-/*  position: relative;*/
-/*}*/
-/*#first-div {*/
-/*  width:50%;*/
-/*  height:100%;*/
-/*  border-right: 2px solid #619e38*/
-/*}*/
-/*#cell-icon {*/
-/*  border:1px solid blue;*/
-/*  position: absolute;*/
-/*  top: 50%;*/
-/*  left: 50%;*/
-/*  transform:translate(-50%, -50%);*/
-/*  background-color: #fff;*/
-/*  z-index:1;*/
-/*}*/
-
+#loginModuleDIV-registerButton{
+  left: 20px;
+  margin-top: 40px;
+  /*按钮设置透明：background-color + border-width */
+  background-color: rgba(0,0,0,0);
+  border-width: 0;
+  /*height: 40px;*/
+}
 
 </style>
 
