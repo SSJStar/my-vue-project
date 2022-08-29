@@ -8,35 +8,32 @@
     <div id="loginModuleDIV">
 <!--      现在使用的框架是:vue3 + element-plus-->
       <h1 class="loginModuleDIV-title">欢迎登录</h1>
-      <h2 class="loginModuleDIV-subtitle">第一个Vue3页面</h2>
-<!--      <input ref="uName" id="inputUname" placeholder="请输入账号"/><br/>-->
-<!--     <el-input ref="uName" id="inputUname" placeholder="请输入账号" prefix-icon="@/assets/account_icon.png"></el-input><br/>-->
-<!--      <el-form-item>-->
+      <h2 class="loginModuleDIV-subtitle">现在讲解的是 - 图形验证码</h2>
 
-<!--      rows="1" type="textarea"  -->
-      <div style="margin-top: 40px;width: 90%;">
-        <el-input id="inputUname"  v-model="nameValue" placeholder="请输入账号" prefix-icon="el-icon-user-solid" @input="changeHandle($event)"></el-input><br/>
+<!--   账号   -->
+      <div class="div-el-input" style="margin-top: 40px;">
+        <el-input v-model="nameValue" placeholder="请输入账号" :prefix-icon="Avatar"  @input="changeHandle($event)"></el-input>
       </div>
-
-      <div style="margin-top: 20px;width: 90%;">
-        <el-input id="inputPwd"  v-model="pwdValue" placeholder="请输入密码" prefix-icon="el-icon-user-solid" @input="changeHandle($event)"></el-input><br/>
-<!--        <input ref="pwd" id="inputPwd" placeholder="请输入密码"/><br/>-->
+<!--   密码   -->
+      <div class="div-el-input" style="margin-top: 20px;">
+        <el-input v-model="pwdValue" placeholder="请输入密码"  :prefix-icon="Lock" @input="changeHandle($event)"></el-input>
       </div>
+<!--   验证   -->
+      <div class="div-el-input" style="margin-top: 20px;">
+      <!-- 验证码输入框-->
+        <el-input ref="codeInput" placeholder="请输入验证码" :prefix-icon="Check" style="width: calc(100%  - 110px);vertical-align:middle;float: left;" @input="codeChangeHandle($event)"></el-input>
+        <!--图形验证码-->
+        <div class="login_code" @click="refreshCode">
+          <imageValidate :contentWidth=100 :contentHeight=40 style="float: right"  :identifyCode="identifyCode"></imageValidate>
+        </div>
 
-
-
-<!--      <template slot-scope="nameValue">-->
-<!--        <el-input v-model="nameValue" placeholder="备注" ></el-input>-->
-<!--      </template>-->
-
-
-<!--      </el-form-item>-->
-
-<!--      <input ref="pwd" id="inputPwd" placeholder="请输入密码"/><br/>-->
-<!--      <button @click="loginActionFunc">确 认</button>-->
-<!--      customBtnAction-->
+      </div>
+<!--登录按钮-->
+      <div style="width: 100%;height: auto;display: flex;justify-content: center;">
       <el-button id="loginModuleDIV-loginButton" type="primary" @click="loginActionFunc">登 录</el-button>
-      <div style="width: 100%;height: auto">
+      </div>
+<!--      注册按钮-->
+      <div style="width: auto;height: auto">
         <button id="loginModuleDIV-registerButton" @click="registerActionFunc">注 册</button>
       </div>
 
@@ -46,23 +43,42 @@
 </template>
 
 <script setup>
-
+import { Avatar, Lock, Check } from "@element-plus/icons-vue";
+import imageValidate from "@/components/ssj-image-validate.vue";
 let nameValue = ""
 let pwdValue = ""
+
+// 图形验证码
+let identifyCodes = "1234567890"
+let identifyCode = ref('3212')
+
 import router from "../router";
 // import SSJButton from "@/components/SSJButton";
 import {getRegisterCode, loginWithUNameAndPwd} from "@/api/api";
 import {getCurrentInstance, ref} from 'vue'
-// export default {
-  // components: {SSJButton},
-  // methods: {
-    function loginActionFunc(){
+
+
+// const datab = getCurrentInstance();
+
+//登录按钮 - 点击
+function loginActionFunc(){
       // console.log("点击了按钮1:"+this.$refs.uName.value)
 
       // const  e = ref(uName)
   // console.log("点击了按钮1:"+e.value)
-      let  uName = ref(null)
-      console.log("点击了按钮1:"+uName.value)
+  //     let  uName = ref(null)
+  console.log("账号:"+nameValue)
+  console.log("密码:"+pwdValue)
+
+  let codeInput = ref(null)
+  console.log("输入的验证码:"+codeInput.value)
+
+  if (codeInput.value == identifyCode) {
+    alert("验证码-校验成功")
+  }else {
+    alert("您输入的验证码不对："+codeInput.value)
+  }
+
 
 
       // this.$emit()
@@ -89,32 +105,58 @@ import {getCurrentInstance, ref} from 'vue'
       // })
 
     }
-  // }
-// }
 
+//注册按钮-点击
 function registerActionFunc(){
-
+// console.log("注册模块，还没开始写")
+  alert("注册模块，还没开始写")
 }
 
 //定义在方法外面，才有效
 const currentInstance = getCurrentInstance()
 
 function changeHandle (e) { // input事件
-  console.log("changeHandle1:"+ document.getElementById('inputUname').value)
+  // console.log("changeHandle1:"+ document.getElementById('inputUname').value)
+  console.log("changeHandle1:"+ nameValue)
   currentInstance.proxy.$forceUpdate()
+
 }
+
+function codeChangeHandle(e){
+// console.log("changeHandle1:"+ nameValue)
+currentInstance.proxy.$forceUpdate()
+}
+
+
+//点击事件 - 刷新验证码
+const refreshCode = () => {
+  identifyCode.value = "";
+  makeCode(identifyCodes, 4);
+}
+const randomNum = (min, max) => {
+  return Math.floor(Math.random() * (max - min) + min)
+}
+const makeCode = (o, l) => {
+  for (let i = 0; i < l; i++) {
+    identifyCode.value += o[
+        randomNum(0, o.length)
+        ];
+  }
+  console.log("刷新后验证码是:"+identifyCode.value)
+}
+
+
+// return {
+//   codeInput,
+//   childRef,//记得要返回子组件的ref，不然访问不到
+// };
 
 </script>
 
+
 <style>
-/* 定义样式：id="login" */
-/*#login{*/
-/*  background-color: slategray;*/
-/*}*/
-/* 定义样式：class="myH1" */
 
-
-/* backgroundDIV */
+/* 背景div */
 #backgroundDIV{
   background-color: bisque;
   width: 100%;
@@ -122,18 +164,19 @@ function changeHandle (e) { // input事件
   position: absolute;
 }
 
+/* 背景图片 */
 #backgroundDIV img{
   width: 100%;height: 100%;
 }
 
-/* loginModuleDIV 模块 */
+/* 登录模块 */
 #loginModuleDIV{
   /*background-color:#323bb6;*/
 
   /*! autoprefixer: ignore next */
   background:-webkit-gradient(linear, 100% 0, 0 0, from(rgb(58 96 199)), to(rgb(57 63 187)));
 
-  width: 40%;height: 60%;
+  width: 40%;height: 65%;
   position: absolute;
   top: 50%;
   left:50%;
@@ -142,31 +185,30 @@ function changeHandle (e) { // input事件
   border: 0px solid rgb(255,255,255);/* border-radius要配合这句使用，否则输入框会出现内阴影*/
 }
 
-
+/* 主标题 */
 .loginModuleDIV-title{
-  color: cadetblue;
+  color: rgba(255,255,255,0.9);
   padding: 0;
   margin: 40px 0 0 0;
 }
 
+/* 副标题 */
 .loginModuleDIV-subtitle{
-  color: cadetblue;
+  color: rgba(255,255,255,0.9);
   padding: 0;
   margin: 30px 0 0 0;
 }
 
+/*账号、密码div公共样式设置：*/
+.div-el-input{
+  width: 100%;padding: 0px 20px 0px 20px;box-sizing: border-box;
+}
+
 /*el-input内部实际上也用到了input组件，所以这里的设置，对账号和密码这两个el-input也有效果*/
 #loginModuleDIV input{
-  width: 90%;
   height: 40px;
   border-radius: 10px;/*设置四分之一圆角*/
   border: 0px solid rgb(255,255,255);/* border-radius要配合这句使用，否则输入框会出现内阴影*/
-}
-
-#inputUname{
-  /*margin-top: 40px;*/
-  /*height: 40px;*/
-  /*text-align: center;*/
 }
 
 /*>>> .el-input__inner{*/
@@ -174,19 +216,21 @@ function changeHandle (e) { // input事件
 /*  height: 500px;*/
 /*}*/
 
-#inputPwd{
-  /*margin-top: 20px;*/
-  /*width: 200px;*/
-}
+/*#inputPwd{*/
+/*  !*margin-top: 20px;*!*/
+/*  !*width: 200px;*!*/
+/*}*/
 
+/* 登录按钮 */
 #loginModuleDIV-loginButton{
- margin-top: 32px;
+ margin-top: 48px;
   width: 45%;
   height: 47px;
+  /*transform: translate(-50%,-50%)*/
 }
 
+/* 注册按钮 */
 #loginModuleDIV-registerButton{
-  left: 20px;
   margin-top: 27px;
   /*按钮设置透明：background-color + border-width */
   background-color: rgba(0,0,0,0);
@@ -194,7 +238,6 @@ function changeHandle (e) { // input事件
   color: rgba(57 157 189);
   font-weight: bold;
   font-size: 14px;
-  /*height: 40px;*/
 }
 
 </style>
@@ -232,3 +275,15 @@ function changeHandle (e) { // input事件
 <!--&lt;!&ndash;    </el-row>&ndash;&gt;-->
 
 <!--&lt;!&ndash;    <SSJButton title="自定义按钮" @btnClick="customBtnAction"></SSJButton>&ndash;&gt;-->
+
+
+<!--图形验证码-->
+<!--        <div style="width: 120px;height: 40px;display: inline-block;position: relative;">-->
+<!--          <img src="@/assets/keji_bg.png" @click="imgValidateFunc($event)" style="width: calc(100% - 20px);height:100%;position: relative;left: 10px"/>-->
+<!--          <label style="color: rgba(255, 255, 255, 0.9) ;left: 42%;top: 30%;position:absolute;">A F C</label>-->
+<!--        </div>-->
+
+<!--function imgValidateFunc(e){-->
+<!--//切换验证码图片-->
+<!--console.log("切换验证码图片");-->
+<!--}-->
