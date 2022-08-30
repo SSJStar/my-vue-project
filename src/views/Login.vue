@@ -12,16 +12,18 @@
 
 <!--   账号   -->
       <div class="div-el-input" style="margin-top: 40px;">
-        <el-input v-model="nameValue" placeholder="请输入账号" :prefix-icon="Avatar"  @input="changeHandle($event)"></el-input>
+        <el-input ref="uName" v-model="nameValue"  placeholder="请输入账号" :prefix-icon="Avatar"   @input="changeHandle($event)"></el-input>
       </div>
+
 <!--   密码   -->
       <div class="div-el-input" style="margin-top: 20px;">
-        <el-input v-model="pwdValue" placeholder="请输入密码"  :prefix-icon="Lock" @input="changeHandle($event)"></el-input>
+        <el-input v-model="pwdValue" placeholder="请输入密码"  :prefix-icon="Lock" @input="pwdChangeHandle($event)"></el-input>
       </div>
+
 <!--   验证   -->
       <div class="div-el-input" style="margin-top: 20px;">
-      <!-- 验证码输入框-->
-        <el-input ref="codeInput" placeholder="请输入验证码" :prefix-icon="Check" style="width: calc(100%  - 110px);vertical-align:middle;float: left;" @input="codeChangeHandle($event)"></el-input>
+        <!-- 验证码输入框-->
+        <el-input v-model="codeInputValue" placeholder="请输入验证码" :prefix-icon="Check" style="width: calc(100%  - 110px);vertical-align:middle;float: left;" @input="codeChangeHandle($event)"></el-input>
         <!--图形验证码-->
         <div class="login_code" @click="refreshCode">
           <imageValidate :contentWidth=100 :contentHeight=40 style="float: right"  :identifyCode="identifyCode"></imageValidate>
@@ -42,11 +44,32 @@
 
 </template>
 
+
+<script>
+export default {
+  data() {
+    return {
+      //这里一定要记得返回v-model中绑定的值！
+      nameValue: '',
+      pwdValue:'',
+      codeInputValue:'',
+    }
+  }
+}
+</script>
+
 <script setup>
 import { Avatar, Lock, Check } from "@element-plus/icons-vue";
 import imageValidate from "@/components/ssj-image-validate.vue";
+
+// loginInput:{
+//   let nameValue = "",
+//       pwdValue = ""
+// }
+
 let nameValue = ""
 let pwdValue = ""
+let codeInputValue = ""
 
 // 图形验证码
 let identifyCodes = "1234567890"
@@ -55,28 +78,30 @@ let identifyCode = ref('3212')
 import router from "../router";
 // import SSJButton from "@/components/SSJButton";
 import {getRegisterCode, loginWithUNameAndPwd} from "@/api/api";
-import {getCurrentInstance, ref} from 'vue'
+import {getCurrentInstance, onMounted, ref} from 'vue'
+
+// let codeInputRef = ref(null)
 
 
 // const datab = getCurrentInstance();
 
+let uName = ""
+
 //登录按钮 - 点击
 function loginActionFunc(){
-      // console.log("点击了按钮1:"+this.$refs.uName.value)
-
-      // const  e = ref(uName)
-  // console.log("点击了按钮1:"+e.value)
+      const  e = ref(uName)
+  console.log("点击了按钮:"+e.value)
   //     let  uName = ref(null)
   console.log("账号:"+nameValue)
-  console.log("密码:"+pwdValue)
+  console.log("密码:"+pwdValue.valueOf())
 
-  let codeInput = ref(null)
-  console.log("输入的验证码:"+codeInput.value)
 
-  if (codeInput.value == identifyCode) {
+  console.log("输入的验证码:"+codeInputValue)
+
+  if (codeInputValue == identifyCode.value) {
     alert("验证码-校验成功")
   }else {
-    alert("您输入的验证码不对："+codeInput.value)
+    alert("您输入的验证码不对："+codeInputValue+"\t 应该是:"+identifyCode.value)
   }
 
 
@@ -115,16 +140,33 @@ function registerActionFunc(){
 //定义在方法外面，才有效
 const currentInstance = getCurrentInstance()
 
+//账号-内容变化
 function changeHandle (e) { // input事件
   // console.log("changeHandle1:"+ document.getElementById('inputUname').value)
-  console.log("changeHandle1:"+ nameValue)
+  console.log("changeHandle->nameValue:"+ nameValue +"\t e:"+e)
   currentInstance.proxy.$forceUpdate()
-
+  nameValue = e
 }
 
+//密码-内容变化
+function pwdChangeHandle (e) { // input事件
+                            // console.log("changeHandle1:"+ document.getElementById('inputUname').value)
+  console.log("pwdChangeHandle->pwdValue:"+ pwdValue +"\t e:"+e)
+  currentInstance.proxy.$forceUpdate()
+pwdValue = e
+}
+
+//验证码-内容变化
+// let codeInput = ref(null)
 function codeChangeHandle(e){
-// console.log("changeHandle1:"+ nameValue)
+
+
+  // console.log("输入的验证码:"+codeInput.value)
+
+  // console.log("codeChangeHandle->pwdValue:"+ codeInputValue +"\t e:"+ e +"\t 通过ref获取验证码："+codeInputRef.value)
+  console.log("codeChangeHandle->pwdValue:"+ codeInputValue +"\t e:"+ e)
 currentInstance.proxy.$forceUpdate()
+  codeInputValue = e
 }
 
 
@@ -150,6 +192,10 @@ const makeCode = (o, l) => {
 //   codeInput,
 //   childRef,//记得要返回子组件的ref，不然访问不到
 // };
+
+onMounted( ()=> {
+  console.log("onMounted---codeInputRef---",codeInputValue.value)
+});
 
 </script>
 
