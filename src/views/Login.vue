@@ -63,14 +63,16 @@
 
 <script setup>
 import { Avatar, Lock, Check } from "@element-plus/icons-vue";
-
 import imageValidate from "@/components/ssj-image-validate.vue";
+import {getRegisterCode, loginWithUNameAndPwd} from "@/api/api";
+import {getCurrentInstance, onMounted, ref} from 'vue'
+import router from "../router";
 
 // 定义一个对象，用来存放输入的账号、密码、验证码
 let loginInput = {
-      nameValue: '',
-      pwdValue: '',
-      codeInputValue: ''
+  nameValue: '',
+  pwdValue: '',
+  codeInputValue: ''
 }
 
 
@@ -78,17 +80,7 @@ let loginInput = {
 let identifyCodes = "1234567890abcdefghijklmnopqrstuvwxyz"//随机数-数据源
 let identifyCode = ref('3212')//当前随机数，初始值为3212
 
-import router from "../router";
-// import SSJButton from "@/components/SSJButton";
-import {getRegisterCode, loginWithUNameAndPwd} from "@/api/api";
-import {getCurrentInstance, onMounted, ref} from 'vue'
-import Home from "@/views/Home";
-
 // let codeInputRef = ref(null)
-
-
-// const datab = getCurrentInstance();
-
 
 //登录按钮 - 点击
 function loginActionFunc() {
@@ -100,7 +92,7 @@ function loginActionFunc() {
 
   console.log("输入的验证码:" + loginInput.codeInputValue)
 
-  if (loginInput.codeInputValue == identifyCode.value) {
+  if (loginInput.codeInputValue.toString() == identifyCode.toString()) {
     //开始请求
     loginWithUNameAndPwd({"username": loginInput.nameValue, "password": loginInput.pwdValue}).then(
         (res) => {
@@ -120,23 +112,26 @@ function loginActionFunc() {
 
   } else {
     alert("您输入的验证码不对：" + loginInput.codeInputValue + "\t 应该是:" + identifyCode.value)
-    return
   }
 }
 
 //注册按钮-点击
 function registerActionFunc(){
-// console.log("注册模块，还没开始写")
   alert("注册模块，还没开始写")
 
-  // getRegisterCode({"username":this.$refs.uName.textContent}).then(
-  //     (res) => {
-  //       console.log("请求结束了\\n")
-  //       console.log(res)
-  //     }
-  // ).catch((err) =>{
-  //   console.log("请求错误信息："+ err)
-  // })
+  getRegisterCode({"username":loginInput.nameValue}).then(
+      (res) => {
+        console.log("请求结束了\\n")
+        console.log(res)
+      }
+  ).catch((err) =>{
+    // console.log("请求错误信息："+ err
+    if (err.message.includes("code 500")) {
+      alert("500错误，请联系管理员")
+    } else {
+      alert("其它错误：" + err.message)
+    }
+  })
 }
 
 //定义在方法外面，才有效
@@ -159,13 +154,11 @@ function pwdChangeHandle (e) { // input事件
 }
 
 //验证码-内容变化
-// let codeInput = ref(null)
 function codeChangeHandle(e){
   console.log("codeChangeHandle->pwdValue:"+ loginInput.codeInputValue +"\t e:"+ e)
   currentInstance.proxy.$forceUpdate()
   loginInput.codeInputValue = e
 }
-
 
 //点击事件 - 刷新验证码
 const refreshCode = () => {
@@ -198,69 +191,72 @@ onMounted( ()=> {
 
 
 <style>
-
 /* 背景div */
-#background-div{
+#background-div {
   background-color: bisque;
   width: 100%;
   height: 100%;
   position: absolute;
 }
 
-/* 背景图片 */
-#background-div img{
-  width: 100%;height: 100%;
-}
+  /* 背景图片 */
+  #background-div img {
+    width: 100%;
+    height: 100%;
+  }
 
 /* 登录模块 */
-#login-module-div{
-  /*background-color:#323bb6;*/
-
+#login-module-div {
   /*! autoprefixer: ignore next */
-  background:-webkit-gradient(linear, 100% 0, 0 0, from(rgb(58 96 199)), to(rgb(57 63 187)));
+  background: -webkit-gradient(linear, 100% 0, 0 0, from(rgb(58 96 199)), to(rgb(57 63 187)));
 
   width: 35%;
   height: 540px;
   position: absolute;
   top: 50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  border-radius: 10px;/*设置四分之一圆角*/
-  border: 0px solid rgb(255,255,255);/* border-radius要配合这句使用，否则输入框会出现内阴影*/
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px; /*设置四分之一圆角*/
+  border: 0 solid rgb(255, 255, 255); /* border-radius要配合这句使用，否则输入框会出现内阴影*/
 }
 
 /* 主标题 */
-#login-module-div .lmd-title{
-  color: rgba(255,255,255,0.9);
+#login-module-div .lmd-title {
+  color: rgba(255, 255, 255, 0.9);
   padding: 0;
   margin: 40px 0 0 0;
 }
 
 /* 副标题 */
-#login-module-div .lmd-subtitle{
-  color: rgba(255,255,255,0.9);
+#login-module-div .lmd-subtitle {
+  color: rgba(255, 255, 255, 0.9);
   padding: 0;
   margin: 30px 0 0 0;
 }
 
 /*账号、密码div公共样式设置：*/
-.el-input-div{
-  width: 100%;padding: 0px 20px 0px 20px;box-sizing: border-box;
+.el-input-div {
+  width: 100%;
+  padding: 0 20px 0 20px;
+  box-sizing: border-box;
 }
 
 /*el-input内部实际上也用到了input组件，所以这里的设置，对账号和密码这两个el-input也有效果*/
-#login-module-div input{
+#login-module-div input {
   height: 40px;
-  border-radius: 10px;/*设置四分之一圆角*/
-  border: 0px solid rgb(255,255,255);/* border-radius要配合这句使用，否则输入框会出现内阴影*/
+  border-radius: 10px; /*设置四分之一圆角*/
+  border: 0 solid rgb(255, 255, 255); /* border-radius要配合这句使用，否则输入框会出现内阴影*/
 }
 
 /*图片验证码 - 输入框样式*/
-#login-module-div .imgCode-input{
-  width: calc(100%  - 110px);vertical-align:middle;float: left;
+#login-module-div .imgCode-input {
+  width: calc(100% - 110px);
+  vertical-align: middle;
+  float: left;
 }
+
 /*图片验证码 - 图片样式*/
-.imgCode-imageValidate-div{
+.imgCode-imageValidate-div {
   float: right;
 }
 
@@ -275,22 +271,25 @@ onMounted( ()=> {
 /*}*/
 
 /* 登录按钮 */
-#login-module-div .login-button-div{
-  width: 100%;height: auto;display: flex;justify-content: center;
+#login-module-div .login-button-div {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
 }
 
-#login-module-div .login-button-div .login-button{
- margin-top: 48px;
+#login-module-div .login-button-div .login-button {
+  margin-top: 48px;
   width: 45%;
   height: 47px;
   /*transform: translate(-50%,-50%)*/
 }
 
 /* 注册按钮 */
-#login-module-div .lmd-register-button{
+#login-module-div .lmd-register-button {
   margin-top: 27px;
   /*按钮设置透明：background-color + border-width */
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   border-width: 0;
   color: rgba(57 157 189);
   font-weight: bold;

@@ -36,65 +36,42 @@
 
 
 
-<!--第二种-->
+
 
 <template>
-  <div class="index">
-    <HeadNav></HeadNav>
-    <LeftMenu class="left"></LeftMenu>
-    <div class="router-div">
-<!--      <component :is="HomeView"></component>-->
-<!--      <HomeView></HomeView>-->
-    </div>
-
+  <div class="head-nav">
+这是头部
+    <el-page-header>
+      <!-- Line 1 -->
+      <template #breadcrumb />
+      <!-- Line 2 -->
+      <template #icon />
+      <template #title />
+      <template #content />
+      <template #extra />
+      <!-- Lines after 2 -->
+      <template #default />
+    </el-page-header>
   </div>
 </template>
 
 <script>
-import HeadNav from '../components/HeadNav'
-import LeftMenu from '../components/LeftMenu'
-// import {nextTick, reactive} from "vue/dist/vue";
+
 export default {
-  name:'index',
+  name:'head-nav',
   components: {
-    HeadNav,
-    LeftMenu,
-    // PersonInfoView,
+    // HeadNav,
+    // LeftMenu
   }
-  // data:{
-  //   scrH:document.documentElement.clientHeight
-  // }
-
-
-//   const state = reactive({
-//     hHeight: 0
-//   })
-//   nextTick(()=>{
-//   state.hHeight = document.documentElement.clientHeight;
-//   console.log(document.documentElement.clientHeight)
-// })
-
 }
 </script>
 
 <style>
-
-.index{
+.head-nav{
   width: 100%;
-  height: 100%;
+  height: 71px;
   overflow: hidden;
-  position: absolute;/*不加这句，高度不能铺满*/
+  background-color: cadetblue;
 }
 
-.left {
-  background-color: gray;
-  width: 200px;
-  height: 100%;
-}
-
-.router-div {
-  width: calc(100% - 280px);
-  height: calc(100% - 71px);
-  background-color: gray;
-}
 </style>
