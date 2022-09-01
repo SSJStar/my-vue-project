@@ -317,36 +317,7 @@
 
 
 
-
-
-<!--第四种-->
-
-<template>
-  <el-menu active-text-color="#ffd04b"
-    background-color="#545c64"
-    class="el-menu-vertical-demo"
-    default-active="4"
-    text-color="#fff"
-    @open="handleOpen"
-    @close="handleClose">
-
-      <el-sub-menu :index="item.parent_id" v-for="item in listJson.list" :key="item.parent_id">
-        <template #title>
-          <i class="el-icon-s-home"></i>
-          <span class="caidan-auth">{{ item.title }}</span>
-        </template>
-        <el-menu-item :index="item2.index" v-for="item2 in item.children" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
-          <i class="item.icons"></i>
-          <span class="caidan-auth">{{ item2.menu_name }}</span>
-        </el-menu-item>
-      </el-sub-menu>
-
-      </el-menu>
-    </template>
-
-
-
-    <!--<script lang="ts" setup>-->
+<!--<script lang="ts" setup>-->
 <!--import {-->
 <!--  Document,-->
 <!--  Menu as IconMenu,-->
@@ -362,20 +333,50 @@
 <!--</script>-->
 
 
-<script setup>
-import {
-  Document,
-  Menu as IconMenu,
-  Location,
-  Setting,
-} from '@element-plus/icons-vue'
 
+<!--第四种-->
+
+<template>
+  <el-button style="width: 200px;height: 20px;background-color: #2c3e50;color: white;padding: 0;margin: 0;" @click="zhedie">折叠</el-button>
+  <el-container>
+    <el-aside :width="isCollapse ? '64px':'200px'">
+    <el-menu active-text-color="#ffd04b"
+    background-color="#545c64"
+    class="el-menu-vertical-demo"
+    default-active="4"
+    text-color="#fff"
+    @open="handleOpen"
+    @close="handleClose" unique-opened :collapse="isCollapse" :collapse-transition="false">
+
+      <el-sub-menu :index="item.parent_id" v-for="item in listJson.list" :key="item.parent_id">
+        <template #title>
+          <i class="el-icon-s-home"></i>
+          <span class="caidan-auth">{{ item.title }}</span>
+        </template>
+        <el-menu-item :index="item2.index" v-for="item2 in item.childrens" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
+          <i class="item.icons"></i>
+          <span class="caidan-auth">{{ item2.title }}</span>
+        </el-menu-item>
+      </el-sub-menu>
+
+      </el-menu>
+  </el-aside>
+  </el-container>
+</template>
+
+
+<script setup>
+
+import {ref} from "vue";
+
+let isCollapse = ref( false)
 
 let listJson = {
   title:"列表数据",
   list:[
     {
       index:"1",
+      parent_id: "0",
       iconName:"",
       title:"浙江",
       childrens:[
@@ -384,7 +385,26 @@ let listJson = {
           parent_id: "1",
           iconName:"",
           title:"杭州",
-          childrens:[]
+          childrens:[
+            {
+              index:"1-1-1",
+              parent_id: "1-1",
+              iconName:"",
+              title:"西湖区",
+              childrens:[]
+            },{
+              index:"1-1-2",
+              parent_id: "1-1",
+              iconName:"",
+              title:"滨江区",
+              childrens:[]
+            },{
+              index:"1-1-3",
+              parent_id: "1-1",
+              iconName:"",
+              title:"商城区",
+              childrens:[]
+            },]
         },
         {
           index:"1-2",
@@ -411,14 +431,37 @@ let listJson = {
     },
     {
       index:"2",
+      parent_id: "0",
       iconName:"",
       title:"上海",
       childrens:[]
     },
     {
       iconName:"3",
+      parent_id: "0",
       title:"内蒙",
-      childrens:[]
+      childrens:[
+        {
+          index:"3-1",
+          parent_id: "3",
+          iconName:"",
+          title:"呼和浩特",
+          childrens:[]
+        },
+        {
+          index:"3-2",
+          parent_id: "3",
+          iconName:"",
+          title:"包头",
+          childrens:[]
+        },
+        {
+          index:"3-3",
+          parent_id: "3",
+          iconName:"",
+          title:"乌海",
+          childrens:[]
+        },]
     },
   ]
 }
@@ -430,12 +473,19 @@ function goUrl(title,title2,index){
 
 //key: string, keyPath: string[]
 const handleOpen =(key, keyPath) => {
-  console.log(key, keyPath)
+  console.log("handleOpen--"+key, keyPath)
+  isCollapse = !isCollapse
 }
 
 //key: string, keyPath: string[]
 const handleClose = (key, keyPath) => {
-  console.log(key, keyPath)
+  console.log("handleClose--"+key, keyPath)
+  isCollapse = !isCollapse
+}
+
+function zhedie(){
+  isCollapse.value = !isCollapse.value
+  console.log("点击后的isCollapse--"+!isCollapse.value)
 }
 </script>
 
