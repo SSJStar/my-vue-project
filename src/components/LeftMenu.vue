@@ -337,7 +337,7 @@
 <!--第四种-->
 
 <template>
-  <el-button style="width: 200px;height: 20px;background-color: #2c3e50;color: white;padding: 0;margin: 0;" @click="zhedie">折叠</el-button>
+  <el-button style="width: 300px;height: 20px;background-color: #2c3e50;color: white;padding: 0;margin: 0;" @click="zhedie">折叠</el-button>
   <el-container>
     <el-aside :width="isCollapse ? '64px':'200px'">
     <el-menu active-text-color="#ffd04b"
@@ -348,15 +348,59 @@
     @open="handleOpen"
     @close="handleClose" unique-opened :collapse="isCollapse" :collapse-transition="false">
 
-      <el-sub-menu :index="item.parent_id" v-for="item in listJson.list" :key="item.parent_id">
+<!--      <div :index="item.parent_id" v-for="item in listJson.list" :key="item.parent_id">-->
+<!--        <div v-if="item.childrens.length>0">-->
+<!--          -->
+<!--        </div>-->
+<!--      </div>-->
+
+      <el-sub-menu :index="item.parent_id" v-for="item in listJson.list" :key="item.parent_id" >
         <template #title>
           <i class="el-icon-s-home"></i>
           <span class="caidan-auth">{{ item.title }}</span>
         </template>
-        <el-menu-item :index="item2.index" v-for="item2 in item.childrens" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
-          <i class="item.icons"></i>
-          <span class="caidan-auth">{{ item2.title }}</span>
-        </el-menu-item>
+<!--        这里的item表示第一级菜单-->
+        <div v-if="item.childrens.length===0">
+          <el-menu-item :index="item.index" v-for="item2 in item.childrens" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
+            <h1>{{"===0:"+item.title+" ->"+item.childrens.length}}}</h1>
+            <i class="item.icons"></i>
+            <span class="caidan-auth">{{ item2.title }}</span>
+          </el-menu-item>
+        </div>
+
+<!--        <h1>{{">0当前item:"+item.title+" childrens.length:"+item.childrens.length}}}</h1>-->
+          <div v-if="item.childrens.length>0" v-for="item2 in item.childrens" :key="item2.parent_id">
+<!--            <h1>{{"000:"+item2.title+" ->"+ (item2.childrens.length > 0)}}</h1>-->
+
+            <!--            v-if：如果二级菜单，有子菜单-->
+              <div v-if="item2.childrens.length>0">
+                <el-sub-menu  :index="item2.parent_id" :key="item2.parent_id">
+                  <template #title>
+                    <!--                <h1>{{">0:"+item.title+" ->"+item.childrens.length}}}</h1>-->
+                    <i class="el-icon-s-home"></i>
+                    <span class="caidan-auth">{{ item2.title }}</span>
+                  </template>
+                  <!--          三级菜单固定为最后一层，不再往下拓展（所以用el-menu-item）-->
+                  <el-menu-item  :index="item2.index" v-for="item2 in item2.childrens" :key="item2.id" @click="goUrl(item2.title,item2.title,item2.index)">
+                    <i class="item.icons"></i>
+                    <span class="caidan-auth">{{ item2.title }}</span>
+                  </el-menu-item>
+                </el-sub-menu>
+
+              </div>
+
+            <!--            v-else：如果二级菜单，没有子菜单-->
+            <div v-else>
+              <!--            二级菜单下面没有子菜单，那二级菜单就用el-menu-item-->
+              <!--            <h1>{{">0:"+item2.title+" ->"+ (item2.childrens.length === 0)}}</h1>-->
+              <el-menu-item :index="item2.index" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
+                <!--              <h1>{{"===0:"+item2.title+" ->"+item2.childrens.length}}}</h1>-->
+                <i class="item.icons"></i>
+                <span class="caidan-auth">{{ item2.title }}</span>
+              </el-menu-item>
+            </div>
+          </div>
+
       </el-sub-menu>
 
       </el-menu>
