@@ -40,8 +40,12 @@
 
 <template>
   <div class="index">
-    <HeadNav></HeadNav>
-    <LeftMenu class="left"></LeftMenu>
+    <div>
+      <HeadNav></HeadNav>
+    </div>
+    <div>
+      <LeftMenu class="left"></LeftMenu>
+    </div>
     <div class="router-div">
 <!--      <component :is="HomeView"></component>-->
 <!--      <HomeView></HomeView>-->
