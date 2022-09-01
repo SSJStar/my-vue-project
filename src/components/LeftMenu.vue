@@ -348,31 +348,27 @@
     @open="handleOpen"
     @close="handleClose" unique-opened :collapse="isCollapse" :collapse-transition="false">
 
-<!--      <div :index="item.parent_id" v-for="item in listJson.list" :key="item.parent_id">-->
-<!--        <div v-if="item.childrens.length>0">-->
-<!--          -->
-<!--        </div>-->
-<!--      </div>-->
+      <div :index="item.parent_id" v-for="item in listJson.list" :key="item.parent_id">
+        <div v-if="item.childrens.length>0">
+          <el-sub-menu :index="item.parent_id" :key="item.parent_id" >
+            <template #title>
+              <i class="el-icon-s-home"></i>
+              <span class="caidan-auth">{{ item.title }}</span>
+            </template>
+            <!--        这里的item表示第一级菜单-->
+            <div v-if="item.childrens.length===0">
+              <el-menu-item :index="item.index" v-for="item2 in item.childrens" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
+                <h1>{{"===0:"+item.title+" ->"+item.childrens.length}}}</h1>
+                <i class="item.icons"></i>
+                <span class="caidan-auth">{{ item2.title }}</span>
+              </el-menu-item>
+            </div>
 
-      <el-sub-menu :index="item.parent_id" v-for="item in listJson.list" :key="item.parent_id" >
-        <template #title>
-          <i class="el-icon-s-home"></i>
-          <span class="caidan-auth">{{ item.title }}</span>
-        </template>
-<!--        这里的item表示第一级菜单-->
-        <div v-if="item.childrens.length===0">
-          <el-menu-item :index="item.index" v-for="item2 in item.childrens" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
-            <h1>{{"===0:"+item.title+" ->"+item.childrens.length}}}</h1>
-            <i class="item.icons"></i>
-            <span class="caidan-auth">{{ item2.title }}</span>
-          </el-menu-item>
-        </div>
+            <!--        <h1>{{">0当前item:"+item.title+" childrens.length:"+item.childrens.length}}}</h1>-->
+            <div v-if="item.childrens.length>0" v-for="item2 in item.childrens" :key="item2.parent_id">
+              <!--            <h1>{{"000:"+item2.title+" ->"+ (item2.childrens.length > 0)}}</h1>-->
 
-<!--        <h1>{{">0当前item:"+item.title+" childrens.length:"+item.childrens.length}}}</h1>-->
-          <div v-if="item.childrens.length>0" v-for="item2 in item.childrens" :key="item2.parent_id">
-<!--            <h1>{{"000:"+item2.title+" ->"+ (item2.childrens.length > 0)}}</h1>-->
-
-            <!--            v-if：如果二级菜单，有子菜单-->
+              <!--            v-if：如果二级菜单，有子菜单-->
               <div v-if="item2.childrens.length>0">
                 <el-sub-menu  :index="item2.parent_id" :key="item2.parent_id">
                   <template #title>
@@ -389,19 +385,36 @@
 
               </div>
 
-            <!--            v-else：如果二级菜单，没有子菜单-->
-            <div v-else>
-              <!--            二级菜单下面没有子菜单，那二级菜单就用el-menu-item-->
-              <!--            <h1>{{">0:"+item2.title+" ->"+ (item2.childrens.length === 0)}}</h1>-->
-              <el-menu-item :index="item2.index" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
-                <!--              <h1>{{"===0:"+item2.title+" ->"+item2.childrens.length}}}</h1>-->
-                <i class="item.icons"></i>
-                <span class="caidan-auth">{{ item2.title }}</span>
-              </el-menu-item>
+              <!--            v-else：如果二级菜单，没有子菜单-->
+              <div v-else>
+                <!--            二级菜单下面没有子菜单，那二级菜单就用el-menu-item-->
+                <!--            <h1>{{">0:"+item2.title+" ->"+ (item2.childrens.length === 0)}}</h1>-->
+                <el-menu-item :index="item2.index" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
+                  <!--              <h1>{{"===0:"+item2.title+" ->"+item2.childrens.length}}}</h1>-->
+                  <i class="item.icons"></i>
+                  <span class="caidan-auth">{{ item2.title }}</span>
+                </el-menu-item>
+              </div>
             </div>
-          </div>
 
-      </el-sub-menu>
+          </el-sub-menu>
+        </div>
+        <div v-else>
+          <!--            v-else：如果一级菜单，没有子菜单-->
+
+            <!--            一级菜单下面没有子菜单，那一级菜单就用el-menu-item-->
+            <!--            <h1>{{">0:"+item2.title+" ->"+ (item2.childrens.length === 0)}}</h1>-->
+            <el-menu-item :index="item.index" :key="item.id" @click="goUrl(item.title,item.title,item.index)">
+              <!--              <h1>{{"===0:"+item2.title+" ->"+item2.childrens.length}}}</h1>-->
+              <i class="item.icons"></i>
+              <span class="caidan-auth">{{ item.title }}</span>
+            </el-menu-item>
+
+        </div>
+
+      </div>
+
+
 
       </el-menu>
   </el-aside>
