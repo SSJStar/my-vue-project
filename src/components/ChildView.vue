@@ -1,0 +1,54 @@
+<template>
+  <div style="background-color: cadetblue;">
+    <button @click="userFatherMethod">点击调用父组件方法</button>
+    <h5>{{foo}}</h5>
+  </div>
+
+</template>
+
+
+<script setup>
+
+/* 在 <script setup> 中必须使用 defineProps 和 defineEmits API 来声明 props 和 emits ，
+ * 它们具备完整的类型推断并且在 <script setup> 中是直接可用的：
+ */
+// 此处填写对外抛出的emit字符标识
+const emit = defineEmits(['fold'])
+
+//此处声明属性，在父组件的表现形式为：<ChildView foo="你好啊，子组件！" />
+const props = defineProps({
+  foo: String
+})
+
+// -> 调用父组件方法
+function userFatherMethod() {
+  // 此处的fold在父组件的表现形式为 <ChildView @flod="XXX"/>
+  //  fold相当于一个标记，父组件的@flod可以理解为对ChildView组件的一种响应，响应的方法实现则是 XXX
+  emit("fold")
+  /*  温馨提示：此处的fold要加入到上面defineEmits里，否则控制台会报警告：
+  *     [Vue warn]: Component emitted event "fold" but it is neither declared in the emits option nor as an "onFold" prop.
+  * */
+}
+
+function childViewMethod1(value) {
+  console.log("我是子组件方法1 -> childViewMethod1")
+}
+
+function childViewMethod2(value) {
+  console.log("我是子组件方法2 -> childViewMethod2")
+}
+
+const doSth = (str) => {
+  console.log("子组件的 doSth 方法执行了！" + str);
+}
+
+//暴露给外界3个方法
+defineExpose({childViewMethod1, childViewMethod2, doSth})
+
+</script>
+
+<!--
+子组件调用父组件方法：
+1、
+
+-->

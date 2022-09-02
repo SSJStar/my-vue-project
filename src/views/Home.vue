@@ -39,31 +39,46 @@
 <!--第二种-->
 
 <template>
-  <div class="index">
+  <div class="home">
     <div>
       <HeadNav></HeadNav>
     </div>
-    <div>
-      <LeftMenu class="left"></LeftMenu>
-    </div>
-    <div class="router-div">
-<!--      <component :is="HomeView"></component>-->
-<!--      <HomeView></HomeView>-->
-    </div>
+<!--    <el-row>-->
+      <div style="width: 100%;height: 100%;display: flex">
+        <div>
+          <LeftMenu class="left" @fold="childFoldAction" ref="left-menu-ref"></LeftMenu>
+        </div>
+        <div class="router-div">
+          <PersonInfoView></PersonInfoView>
+        </div>
+      </div>
+<!--    </el-row>-->
+
 
   </div>
 </template>
+
+<!--<template>-->
+<!--<div class="home">-->
+<!--&lt;!&ndash;<HelloWorld msg="Welcome to Your Vue.js App"/>&ndash;&gt;\-->
+<!--  <PersonInfoView></PersonInfoView>-->
+
+<!--</div>-->
+<!--</template>-->
 
 <script>
 import HeadNav from '../components/HeadNav'
 import LeftMenu from '../components/LeftMenu'
 // import {nextTick, reactive} from "vue/dist/vue";
+// import HelloWorld from '@/components/HelloWorld.vue'
+import PersonInfoView from '@/views/PersonInfoView.vue'
 export default {
-  name:'index',
+  name:'Home',
   components: {
     HeadNav,
     LeftMenu,
-    // PersonInfoView,
+    // HelloWorld
+    PersonInfoView,
   }
   // data:{
   //   scrH:document.documentElement.clientHeight
@@ -79,11 +94,20 @@ export default {
 // })
 
 }
+
+</script>
+
+<script setup>
+
+function childFoldAction(){
+  console.log("这是响应子组件方法")
+}
+
 </script>
 
 <style>
 
-.index{
+.home{
   width: 100%;
   height: 100%;
   overflow: hidden;

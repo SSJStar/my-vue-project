@@ -336,6 +336,25 @@
 
 <!--第四种-->
 
+
+<!--
+数据源大概是要这样展示：
+浙江
+  杭州
+    西湖区
+    滨江区
+    上城区
+  绍兴
+  宁波
+  台州
+上海
+内蒙
+  呼和浩特
+  包头
+  乌海
+-->
+
+
 <template>
   <el-button style="width: 300px;height: 20px;background-color: #2c3e50;color: white;padding: 0;margin: 0;" @click="zhedie">折叠</el-button>
   <el-container>
@@ -414,8 +433,6 @@
 
       </div>
 
-
-
       </el-menu>
   </el-aside>
   </el-container>
@@ -424,7 +441,7 @@
 
 <script setup>
 
-import {ref} from "vue";
+import {defineExpose, ref} from "vue";
 
 let isCollapse = ref( false)
 
@@ -540,10 +557,26 @@ const handleClose = (key, keyPath) => {
   isCollapse = !isCollapse
 }
 
+/* 在 <script setup> 中必须使用 defineProps 和 defineEmits API 来声明 props 和 emits ，
+ * 它们具备完整的类型推断并且在 <script setup> 中是直接可用的：
+ */
+const emit = defineEmits(['change', 'delete'])
+const props = defineProps({
+  foo: String
+})
+//折叠方法
 function zhedie(){
   isCollapse.value = !isCollapse.value
   console.log("点击后的isCollapse--"+!isCollapse.value)
+  emit("fold")
 }
+
+//定义方法，并暴露给外界调用
+function pubMethod(value){
+  console.log("接收外界value:"+value)
+}
+// 暴露给外界调用
+defineExpose({pubMethod})
 </script>
 
 <style>
