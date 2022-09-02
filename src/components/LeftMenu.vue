@@ -356,7 +356,9 @@
 
 
 <template>
-  <el-button style="width: 300px;height: 20px;background-color: #2c3e50;color: white;padding: 0;margin: 0;" @click="zhedie">折叠</el-button>
+<!--  <el-button style="width: 100%;height: 20px;margin: 0;padding: 0;background-color: #2c3e50;color: white;padding: 0;margin: 0;" @click="zhedie">折叠</el-button>-->
+  <el-button @click="zhedie">折叠</el-button>
+  <h5>{{valnum2}}</h5>
   <el-container>
     <el-aside :width="isCollapse ? '64px':'200px'">
     <el-menu active-text-color="#ffd04b"
@@ -441,9 +443,11 @@
 
 <script setup>
 
-import {defineExpose, ref} from "vue";
+import {nextTick, ref} from "vue";
 
 let isCollapse = ref( false)
+let valnum = ref(11)
+let valnum2 = ref(false)
 
 let listJson = {
   title:"列表数据",
@@ -540,6 +544,8 @@ let listJson = {
   ]
 }
 
+let open = false
+
 function goUrl(title,title2,index){
   alert("点击"+index)
 }
@@ -560,15 +566,77 @@ const handleClose = (key, keyPath) => {
 /* 在 <script setup> 中必须使用 defineProps 和 defineEmits API 来声明 props 和 emits ，
  * 它们具备完整的类型推断并且在 <script setup> 中是直接可用的：
  */
-const emit = defineEmits(['change', 'delete'])
+const emit = defineEmits(['change',])
 const props = defineProps({
-  foo: String
+  foo: String,
+  // isFoldPrivate: true //是否使用自带折叠按钮
 })
 //折叠方法
-function zhedie(){
+async function zhedie() {
+  console.log("执行zhedie方法")
+//   setTimeout(async () => {
+//
+//     await nextTick()
+//     // if (typeof isCollapse == "boolean") {
+//     //   console.log("isCollapse变成bool值来")
+//     //   isCollapse = !isCollapse
+//     //   // isCollapse.value = ref( !isCollapse)
+//     // } else if (typeof isCollapse.value == "boolean") {
+//     //   console.log("isCollapse.value变成bool值来")
+//     //   isCollapse.value = !isCollapse.value
+//     // }
+//     isCollapse++
+//
+//     // // isCollapse.value = !isCollapse.value
+//     // if (isCollapse.value === undefined){
+//     //   // isCollapse = !isCollapse
+//     //   // isCollapse.value = !isCollapse
+//     //   isCollapse.value = false
+//     // }else{
+//     //   isCollapse.value = !isCollapse.value
+//     // }
+//
+// // 赋值的时候需要用 res.value
+// //     const temp:boolean = isCollapse.value
+//     console.log("点击后的isCollapse--" + isCollapse.value)
+//     emit("change", !isCollapse.value)
+//   }, 0)
+
+
+  await nextTick()
+  // open = !open
+  // isCollapse.value = open
+  //   if (typeof isCollapse == "boolean") {
+  //     console.log("isCollapse变成bool值来")
+  //     isCollapse = !isCollapse
+  //     // isCollapse.value = ref( !isCollapse)
+  //   } else if (typeof isCollapse.value == "boolean") {
+  //     console.log("isCollapse.value变成bool值来")
+  //     isCollapse.value = !isCollapse.value
+  //   }
+
+  valnum.value = valnum.value + 1
+  valnum2.value = !valnum2.value
   isCollapse.value = !isCollapse.value
-  console.log("点击后的isCollapse--"+!isCollapse.value)
-  emit("fold")
+  // isCollapse = !isCollapse
+  console.log('Now DOM is updated '+valnum.value)
+  console.log('Now DOM is updated '+valnum2.value+'\n')
+  console.log('Now DOM is updated '+isCollapse.value+'\n')
+  console.log('')
+
+
+
+  // if (isCollapse.value === undefined){
+  //   // isCollapse = !isCollapse
+  //   // isCollapse.value = !isCollapse
+  //   isCollapse.value = false
+  // }else{
+  //   isCollapse.value = !isCollapse.value
+  // }
+
+
+  // console.log("点击后的isCollapse--"+isCollapse.value)
+  // emit("change",!isCollapse.value)
 }
 
 //定义方法，并暴露给外界调用
