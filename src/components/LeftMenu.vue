@@ -443,7 +443,8 @@
 
 <script setup>
 
-import {nextTick, ref} from "vue";
+import {nextTick, onMounted, onUnmounted, onUpdated, ref} from "vue";
+// import { onMounted, onUpdated, onUnmounted, } from 'vue'
 
 let isCollapse = ref( false)
 let valnum = ref(11)
@@ -545,6 +546,35 @@ let listJson = {
 }
 
 let open = false
+
+onMounted(()=>{
+  console.log('onMounted 执行1')
+
+
+})
+
+// onUpdated( ()=>{
+//   console.log('onUpdated 执行2')
+// })
+//
+// onUnmounted( ()=>{
+//   console.log('onUnmounted 执行3')
+// })
+
+onUpdated(()=> {
+  console.log('onUpdated 执行2')
+
+  if (typeof isCollapse == "boolean") {
+    console.log("重制isCollapse")
+    isCollapse = ref( false)
+  }else {
+    console.log("不重置 "+isCollapse.value)
+  }
+
+})
+onUnmounted(()=> {
+  console.log('onUnmounted 执行3')
+})
 
 function goUrl(title,title2,index){
   alert("点击"+index)
