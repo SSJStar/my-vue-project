@@ -358,7 +358,7 @@
 <template>
 <!--  <el-button style="width: 100%;height: 20px;margin: 0;padding: 0;background-color: #2c3e50;color: white;padding: 0;margin: 0;" @click="zhedie">折叠</el-button>-->
   <el-button @click="zhedie">折叠</el-button>
-  <h5>{{valnum2}}</h5>
+<!--  <h5>{{valnum2}}</h5>-->
   <el-container>
     <el-aside :width="isCollapse ? '64px':'200px'">
     <el-menu active-text-color="#ffd04b"
@@ -368,8 +368,9 @@
     text-color="#fff"
     @open="handleOpen"
     @close="handleClose" unique-opened :collapse="isCollapse" :collapse-transition="false">
-
+<!--这是一个for循环，遍历第一级-->
       <div :index="item.parent_id" v-for="item in listJson.list" :key="item.parent_id">
+<!-- 针对每一个item，要判断它下面有没有子菜单，如果有就用el-sub-menu创建它，如果没有就用el-menu-创建它 -->
         <div v-if="item.childrens.length>0">
           <el-sub-menu :index="item.parent_id" :key="item.parent_id" >
             <template #title>
@@ -386,37 +387,40 @@
             </div>
 
             <!--        <h1>{{">0当前item:"+item.title+" childrens.length:"+item.childrens.length}}}</h1>-->
-            <div v-if="item.childrens.length>0" v-for="item2 in item.childrens" :key="item2.parent_id">
-              <!--            <h1>{{"000:"+item2.title+" ->"+ (item2.childrens.length > 0)}}</h1>-->
+            <div v-if="item.childrens.length>0">
+              <div v-for="item2 in item.childrens" :key="item2.parent_id">
+                <!--            <h1>{{"000:"+item2.title+" ->"+ (item2.childrens.length > 0)}}</h1>-->
 
-              <!--            v-if：如果二级菜单，有子菜单-->
-              <div v-if="item2.childrens.length>0">
-                <el-sub-menu  :index="item2.parent_id" :key="item2.parent_id">
-                  <template #title>
-                    <!--                <h1>{{">0:"+item.title+" ->"+item.childrens.length}}}</h1>-->
-                    <i class="el-icon-s-home"></i>
-                    <span class="caidan-auth">{{ item2.title }}</span>
-                  </template>
-                  <!--          三级菜单固定为最后一层，不再往下拓展（所以用el-menu-item）-->
-                  <el-menu-item  :index="item2.index" v-for="item2 in item2.childrens" :key="item2.id" @click="goUrl(item2.title,item2.title,item2.index)">
+                <!--            v-if：如果二级菜单，有子菜单-->
+                <div v-if="item2.childrens.length>0">
+                  <el-sub-menu  :index="item2.parent_id" :key="item2.parent_id">
+                    <template #title>
+                      <!--                <h1>{{">0:"+item.title+" ->"+item.childrens.length}}}</h1>-->
+                      <i class="el-icon-s-home"></i>
+                      <span class="caidan-auth">{{ item2.title }}</span>
+                    </template>
+                    <!--          三级菜单固定为最后一层，不再往下拓展（所以用el-menu-item）-->
+                    <el-menu-item  :index="item2.index" v-for="item2 in item2.childrens" :key="item2.id" @click="goUrl(item2.title,item2.title,item2.index)">
+                      <i class="item.icons"></i>
+                      <span class="caidan-auth">{{ item2.title }}</span>
+                    </el-menu-item>
+                  </el-sub-menu>
+
+                </div>
+
+                <!--            v-else：如果二级菜单，没有子菜单-->
+                <div v-else>
+                  <!--            二级菜单下面没有子菜单，那二级菜单就用el-menu-item-->
+                  <!--            <h1>{{">0:"+item2.title+" ->"+ (item2.childrens.length === 0)}}</h1>-->
+                  <el-menu-item :index="item2.index" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
+                    <!--              <h1>{{"===0:"+item2.title+" ->"+item2.childrens.length}}}</h1>-->
                     <i class="item.icons"></i>
                     <span class="caidan-auth">{{ item2.title }}</span>
                   </el-menu-item>
-                </el-sub-menu>
-
-              </div>
-
-              <!--            v-else：如果二级菜单，没有子菜单-->
-              <div v-else>
-                <!--            二级菜单下面没有子菜单，那二级菜单就用el-menu-item-->
-                <!--            <h1>{{">0:"+item2.title+" ->"+ (item2.childrens.length === 0)}}</h1>-->
-                <el-menu-item :index="item2.index" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
-                  <!--              <h1>{{"===0:"+item2.title+" ->"+item2.childrens.length}}}</h1>-->
-                  <i class="item.icons"></i>
-                  <span class="caidan-auth">{{ item2.title }}</span>
-                </el-menu-item>
+                </div>
               </div>
             </div>
+
 
           </el-sub-menu>
         </div>
@@ -448,7 +452,7 @@ import {nextTick, onMounted, onUnmounted, onUpdated, ref} from "vue";
 
 let isCollapse = ref( false)
 let valnum = ref(11)
-let valnum2 = ref(false)
+// let valnum2 = ref(false)
 
 let listJson = {
   title:"列表数据",
@@ -564,7 +568,7 @@ onMounted(()=>{
 onUpdated(()=> {
   console.log('onUpdated 执行2')
 
-  if (typeof isCollapse == "boolean") {
+  if (typeof isCollapse.value == "boolean") {
     console.log("重制isCollapse")
     isCollapse = ref( false)
   }else {
@@ -584,13 +588,13 @@ function goUrl(title,title2,index){
 //key: string, keyPath: string[]
 const handleOpen =(key, keyPath) => {
   console.log("handleOpen--"+key, keyPath)
-  isCollapse = !isCollapse
+  // isCollapse = !isCollapse
 }
 
 //key: string, keyPath: string[]
 const handleClose = (key, keyPath) => {
   console.log("handleClose--"+key, keyPath)
-  isCollapse = !isCollapse
+  // isCollapse = !isCollapse
 }
 
 /* 在 <script setup> 中必须使用 defineProps 和 defineEmits API 来声明 props 和 emits ，
@@ -646,11 +650,11 @@ async function zhedie() {
   //   }
 
   valnum.value = valnum.value + 1
-  valnum2.value = !valnum2.value
+  // valnum2.value = !valnum2.value
   isCollapse.value = !isCollapse.value
   // isCollapse = !isCollapse
   console.log('Now DOM is updated '+valnum.value)
-  console.log('Now DOM is updated '+valnum2.value+'\n')
+  // console.log('Now DOM is updated '+valnum2.value+'\n')
   console.log('Now DOM is updated '+isCollapse.value+'\n')
   console.log('')
 
