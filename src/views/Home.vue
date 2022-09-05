@@ -45,7 +45,7 @@
     </div>
 <!--    <el-row>-->
       <div style="width: 100%;height: 100%;display: flex">
-        <div>
+        <div class="left">
 <!--          <LeftMenu style="background-color: gray;  width: 200px;  height: 100%;" @change="childFoldAction" ref="leftmenuRef"></LeftMenu>-->
           <LeftMenu @change="childFoldAction" ref="leftmenuRef"></LeftMenu>
         </div>
@@ -99,9 +99,19 @@ export default {
 </script>
 
 <script setup>
-
 import {ref} from "vue";
 
+// 得到LeftMenu组件实例对象
+const leftmenuRef = ref(null)
+
+/**
+ * LeftMenu组件折叠动作，会给当前组件发送change指令，最终会调用这个方法
+ *
+ * 作者: 小青龙
+ * 时间：2022/09/05 16:41:10
+ * @param value {boolean}  true表示展开，false表示收起
+ * @return {void}
+ */
 function childFoldAction(value){
   if(value){
     console.log("这是响应子组件方法：展开");
@@ -110,12 +120,17 @@ function childFoldAction(value){
   }
 }
 
-// //得到LeftMenu组件实例对象
-// const leftmenuRef = ref(null)
-// //点击父组件按钮，触发这个方法
-// function useChildMehtod(){
-//   leftmenuRef.value.pubMethod("外部参数123")
-// }
+/**
+ * 点击父组件按钮，触发这个方法
+ *
+ * 作者: 小青龙
+ * 时间：2022/09/05 16:39:58
+ * @return {void}
+ */
+function useChildMehtod(){
+  // 调用LeftMenu组件的pubMethod方法，并传入参数 "外部参数12"
+  leftmenuRef.value.pubMethod("外部参数123")
+}
 
 </script>
 
@@ -129,7 +144,7 @@ function childFoldAction(value){
 }
 
 .left {
-  background-color: gray;
+  background-color: #545c64;
   width: 200px;
   height: 100%;
 }

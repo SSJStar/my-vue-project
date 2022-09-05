@@ -358,7 +358,6 @@
 <template>
 <!--  <el-button style="width: 100%;height: 20px;margin: 0;padding: 0;background-color: #2c3e50;color: white;padding: 0;margin: 0;" @click="zhedie">折叠</el-button>-->
   <el-button @click="zhedie">折叠</el-button>
-<!--  <h5>{{valnum2}}</h5>-->
   <el-container>
     <el-aside :width="isCollapse ? '64px':'200px'">
     <el-menu active-text-color="#ffd04b"
@@ -369,50 +368,52 @@
     @open="handleOpen"
     @close="handleClose" unique-opened :collapse="isCollapse" :collapse-transition="false">
 <!--这是一个for循环，遍历第一级-->
-      <div :index="item.parent_id" v-for="item in listJson.list" :key="item.parent_id">
-<!-- 针对每一个item，要判断它下面有没有子菜单，如果有就用el-sub-menu创建它，如果没有就用el-menu-创建它 -->
+      <!-- 针对每一个item、item2，要判断它下面有没有子菜单，如果有就用el-sub-menu创建它，如果没有就用el-menu-创建它 -->
+      <!-- 注意：item3作为第三级菜单，不再往下拓展-->
+      <div :index="item.index" v-for="item in listJson.list" :key="item.parent_id">
+        <!--能进入这个v-if，表示这个一级菜单下面还有子菜单（二级菜单）-->
         <div v-if="item.childrens.length>0">
-          <el-sub-menu :index="item.parent_id" :key="item.parent_id" >
+          <el-sub-menu :index="item.index" :key="item.parent_id" >
+            <!--   这里的item表示第一级菜单   -->
             <template #title>
               <i class="el-icon-s-home"></i>
               <span class="caidan-auth">{{ item.title }}</span>
             </template>
-            <!--        这里的item表示第一级菜单-->
+
+            <!-- 这里展示二级菜单，没有子菜单（三级菜单）就用el-menu-item-->
             <div v-if="item.childrens.length===0">
-              <el-menu-item :index="item.index" v-for="item2 in item.childrens" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
-                <h1>{{"===0:"+item.title+" ->"+item.childrens.length}}}</h1>
+              <el-menu-item :index="item2.index" v-for="item2 in item.childrens" :key="item2.id" @click="goUrl(item2.parent_id,item2.title,item2.index)">
+<!--                <h1>{{"===0:"+item.title+" ->"+item.childrens.length}}}</h1>-->
+                <!--   这里的item2表示第二级菜单   -->
                 <i class="item.icons"></i>
                 <span class="caidan-auth">{{ item2.title }}</span>
               </el-menu-item>
             </div>
 
-            <!--        <h1>{{">0当前item:"+item.title+" childrens.length:"+item.childrens.length}}}</h1>-->
-            <div v-if="item.childrens.length>0">
+            <!-- 这里展示二级菜单，有子菜单就用el-sub-menu-->
+            <!-- v-else跟上面的v-if是一对，这里表示二级菜单下面还有第三级菜单 -->
+            <div v-else>
               <div v-for="item2 in item.childrens" :key="item2.parent_id">
-                <!--            <h1>{{"000:"+item2.title+" ->"+ (item2.childrens.length > 0)}}</h1>-->
-
-                <!--            v-if：如果二级菜单，有子菜单-->
                 <div v-if="item2.childrens.length>0">
-                  <el-sub-menu  :index="item2.parent_id" :key="item2.parent_id">
+                  <!--   这里的item2表示第二级菜单   -->
+                  <el-sub-menu  :index="item2.index" :key="item2.parent_id">
                     <template #title>
-                      <!--                <h1>{{">0:"+item.title+" ->"+item.childrens.length}}}</h1>-->
                       <i class="el-icon-s-home"></i>
                       <span class="caidan-auth">{{ item2.title }}</span>
                     </template>
-                    <!--          三级菜单固定为最后一层，不再往下拓展（所以用el-menu-item）-->
-                    <el-menu-item  :index="item2.index" v-for="item2 in item2.childrens" :key="item2.id" @click="goUrl(item2.title,item2.title,item2.index)">
+                    <!--  这里展示三级菜单，三级菜单为最后一层，不再往下拓展（所以用el-menu-item）-->
+                    <el-menu-item  :index="item3.index" v-for="item3 in item2.childrens" :key="item3.id" @click="goUrl(item3.parent_id,item3.title,item3.index)">
                       <i class="item.icons"></i>
-                      <span class="caidan-auth">{{ item2.title }}</span>
+                      <span class="caidan-auth">{{ item3.title }}</span>
                     </el-menu-item>
                   </el-sub-menu>
 
                 </div>
 
-                <!--            v-else：如果二级菜单，没有子菜单-->
+                <!--  v-else：如果二级菜单，没有子菜单-->
                 <div v-else>
                   <!--            二级菜单下面没有子菜单，那二级菜单就用el-menu-item-->
-                  <!--            <h1>{{">0:"+item2.title+" ->"+ (item2.childrens.length === 0)}}</h1>-->
-                  <el-menu-item :index="item2.index" :key="item2.id" @click="goUrl(item.title,item2.title,item2.index)">
+                  <el-menu-item :index="item2.index" :key="item2.id" @click="goUrl(item2.parent_id,item2.title,item2.index)">
                     <!--              <h1>{{"===0:"+item2.title+" ->"+item2.childrens.length}}}</h1>-->
                     <i class="item.icons"></i>
                     <span class="caidan-auth">{{ item2.title }}</span>
@@ -421,20 +422,16 @@
               </div>
             </div>
 
-
           </el-sub-menu>
         </div>
-        <div v-else>
-          <!--            v-else：如果一级菜单，没有子菜单-->
 
-            <!--            一级菜单下面没有子菜单，那一级菜单就用el-menu-item-->
-            <!--            <h1>{{">0:"+item2.title+" ->"+ (item2.childrens.length === 0)}}</h1>-->
-            <el-menu-item :index="item.index" :key="item.id" @click="goUrl(item.title,item.title,item.index)">
-              <!--              <h1>{{"===0:"+item2.title+" ->"+item2.childrens.length}}}</h1>-->
+        <!--能进入这个v-else，表示这个一级菜单下面没有子菜单-->
+        <div v-else>
+            <!-- 一级菜单下面没有子菜单，那一级菜单就用el-menu-item-->
+            <el-menu-item :index="item.index" :key="item.id" @click="goUrl(item.parent_id,item.title,item.index)">
               <i class="item.icons"></i>
               <span class="caidan-auth">{{ item.title }}</span>
             </el-menu-item>
-
         </div>
 
       </div>
@@ -447,13 +444,12 @@
 
 <script setup>
 
-import {nextTick, onMounted, onUnmounted, onUpdated, ref} from "vue";
-// import { onMounted, onUpdated, onUnmounted, } from 'vue'
+import {onUnmounted, onUpdated, ref} from "vue";
 
+// 折叠还是展开
 let isCollapse = ref( false)
-let valnum = ref(11)
-// let valnum2 = ref(false)
 
+// 菜单数据源
 let listJson = {
   title:"列表数据",
   list:[
@@ -549,52 +545,44 @@ let listJson = {
   ]
 }
 
-let open = false
-
-onMounted(()=>{
-  console.log('onMounted 执行1')
-
-
-})
-
-// onUpdated( ()=>{
-//   console.log('onUpdated 执行2')
-// })
-//
-// onUnmounted( ()=>{
-//   console.log('onUnmounted 执行3')
-// })
-
-onUpdated(()=> {
-  console.log('onUpdated 执行2')
-
-  if (typeof isCollapse.value == "boolean") {
-    console.log("重制isCollapse")
-    isCollapse = ref( false)
-  }else {
-    console.log("不重置 "+isCollapse.value)
-  }
-
-})
-onUnmounted(()=> {
-  console.log('onUnmounted 执行3')
-})
-
-function goUrl(title,title2,index){
-  alert("点击"+index)
+/**
+ * 点击了菜单
+ *
+ * 作者: 小青龙
+ * 时间：2022/09/05 16:17:49
+ * @param parent_id {string}  上一级的index
+ * @param title     {string}      被点击菜单-》文字
+ * @param parent_id {string}  被点击菜单-》index
+ * @return void
+ */
+function goUrl(parent_id,title,index){
+  alert(title+"，id是"+index)
 }
 
-
-//key: string, keyPath: string[]
+/**
+ * 展开菜单
+ *
+ * 作者: 小青龙
+ * 时间：2022/09/05 16:25:51
+ * @example {说点什么}
+ * @param key     {string}    index
+ * @param keyPath {string[]}  描述信息
+ * @return {void}
+ */
 const handleOpen =(key, keyPath) => {
   console.log("handleOpen--"+key, keyPath)
-  // isCollapse = !isCollapse
 }
 
-//key: string, keyPath: string[]
+/**
+ * 收起菜单
+ *
+ * 作者: 小青龙
+ * 时间：2022/09/05 15:54:22
+ * @param key     {string}    描述信息
+ * @param keyPath {string[]}  描述信息
+ */
 const handleClose = (key, keyPath) => {
   console.log("handleClose--"+key, keyPath)
-  // isCollapse = !isCollapse
 }
 
 /* 在 <script setup> 中必须使用 defineProps 和 defineEmits API 来声明 props 和 emits ，
@@ -605,72 +593,13 @@ const props = defineProps({
   foo: String,
   // isFoldPrivate: true //是否使用自带折叠按钮
 })
+
 //折叠方法
-async function zhedie() {
-  console.log("执行zhedie方法")
-//   setTimeout(async () => {
-//
-//     await nextTick()
-//     // if (typeof isCollapse == "boolean") {
-//     //   console.log("isCollapse变成bool值来")
-//     //   isCollapse = !isCollapse
-//     //   // isCollapse.value = ref( !isCollapse)
-//     // } else if (typeof isCollapse.value == "boolean") {
-//     //   console.log("isCollapse.value变成bool值来")
-//     //   isCollapse.value = !isCollapse.value
-//     // }
-//     isCollapse++
-//
-//     // // isCollapse.value = !isCollapse.value
-//     // if (isCollapse.value === undefined){
-//     //   // isCollapse = !isCollapse
-//     //   // isCollapse.value = !isCollapse
-//     //   isCollapse.value = false
-//     // }else{
-//     //   isCollapse.value = !isCollapse.value
-//     // }
-//
-// // 赋值的时候需要用 res.value
-// //     const temp:boolean = isCollapse.value
-//     console.log("点击后的isCollapse--" + isCollapse.value)
-//     emit("change", !isCollapse.value)
-//   }, 0)
-
-
-  await nextTick()
-  // open = !open
-  // isCollapse.value = open
-  //   if (typeof isCollapse == "boolean") {
-  //     console.log("isCollapse变成bool值来")
-  //     isCollapse = !isCollapse
-  //     // isCollapse.value = ref( !isCollapse)
-  //   } else if (typeof isCollapse.value == "boolean") {
-  //     console.log("isCollapse.value变成bool值来")
-  //     isCollapse.value = !isCollapse.value
-  //   }
-
-  valnum.value = valnum.value + 1
-  // valnum2.value = !valnum2.value
+function zhedie() {
+  // console.log("执行zhedie方法")
   isCollapse.value = !isCollapse.value
-  // isCollapse = !isCollapse
-  console.log('Now DOM is updated '+valnum.value)
-  // console.log('Now DOM is updated '+valnum2.value+'\n')
-  console.log('Now DOM is updated '+isCollapse.value+'\n')
-  console.log('')
-
-
-
-  // if (isCollapse.value === undefined){
-  //   // isCollapse = !isCollapse
-  //   // isCollapse.value = !isCollapse
-  //   isCollapse.value = false
-  // }else{
-  //   isCollapse.value = !isCollapse.value
-  // }
-
-
-  // console.log("点击后的isCollapse--"+isCollapse.value)
-  // emit("change",!isCollapse.value)
+  //告诉调用者，展开还是收起
+  emit("change",!isCollapse.value)
 }
 
 //定义方法，并暴露给外界调用
@@ -682,8 +611,21 @@ defineExpose({pubMethod})
 </script>
 
 <style>
-/*.menu-el-col{*/
-/*  width: 200px;*/
-/*  height: calc();*/
-/*}*/
+/*去掉el-menu右侧 - 白色边框线*/
+.el-menu{
+  border: 0!important;
+}
+
+/*菜单关闭*/
+.el-submenu /deep/ .el-submenu__title .el-submenu__icon-arrow{
+  -webkit-transform: rotateZ(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotateZ(-90deg);
+}
+/*菜单展开*/
+.el-submenu.is-opened /deep/ .el-submenu__title .el-submenu__icon-arrow {
+  -webkit-transform: rotateZ(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotateZ(0deg);
+}
 </style>
