@@ -359,7 +359,7 @@
 <!--  <el-button style="width: 100%;height: 20px;margin: 0;padding: 0;background-color: #2c3e50;color: white;padding: 0;margin: 0;" @click="zhedie">折叠</el-button>-->
   <el-button @click="zhedie">折叠</el-button>
   <el-container>
-    <el-aside :width="isCollapse ? '64px':'200px'">
+    <el-aside :width="isCollapse ? foldOff_width:foldOn_width">
     <el-menu active-text-color="#ffd04b"
     background-color="#545c64"
     class="el-menu-vertical-demo"
@@ -591,6 +591,8 @@ const handleClose = (key, keyPath) => {
 const emit = defineEmits(['change',])
 const props = defineProps({
   foo: String,
+  foldOn_width: String,//展开时的宽度
+  foldOff_width: String,//收起时的宽度
   // isFoldPrivate: true //是否使用自带折叠按钮
 })
 

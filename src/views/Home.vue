@@ -47,7 +47,7 @@
       <div style="width: 100%;height: 100%;display: flex">
         <div class="left">
 <!--          <LeftMenu style="background-color: gray;  width: 200px;  height: 100%;" @change="childFoldAction" ref="leftmenuRef"></LeftMenu>-->
-          <LeftMenu @change="childFoldAction" ref="leftmenuRef"></LeftMenu>
+          <LeftMenu @change="childFoldAction" ref="leftmenuRef" v-bind:foldOn_width="foldOnW" v-bind:foldOff_width="foldOffW"></LeftMenu>
         </div>
         <div class="router-div">
           <PersonInfoView></PersonInfoView>
@@ -80,10 +80,7 @@ export default {
     LeftMenu,
     // HelloWorld
     PersonInfoView,
-  }
-  // data:{
-  //   scrH:document.documentElement.clientHeight
-  // }
+  },
 
 
 //   const state = reactive({
@@ -100,6 +97,17 @@ export default {
 
 <script setup>
 import {ref} from "vue";
+import { getCurrentInstance } from 'vue'
+
+// 使用proxy代替ctx，因为ctx只在开发环境有效
+const { proxy } = getCurrentInstance()
+// const currentInstance = getCurrentInstance()
+
+let foldOnW = proxy.$staticVars.leftMenu_foldOnW
+let foldOffW = proxy.$staticVars.leftMenu_foldOffW
+
+//响应式变量，要这么写
+let leftMenuWidth = ref('200px')
 
 // 得到LeftMenu组件实例对象
 const leftmenuRef = ref(null)
@@ -113,10 +121,20 @@ const leftmenuRef = ref(null)
  * @return {void}
  */
 function childFoldAction(value){
+  console.log("全局变量title:",proxy.$staticVars.title)
   if(value){
     console.log("这是响应子组件方法：展开");
+    leftMenuWidth.value = foldOnW//同步更新LeftMenu宽度
+
+    console.log("全局变量",foldOnW)
+    // proxy.$hello()
   }else {
     console.log("这是响应子组件方法： 收起");
+    leftMenuWidth.value = foldOffW//同步更新LeftMenu宽度
+    console.log("全局变量",foldOffW)
+
+    // let b = currentInstance.appContext.config.globalProperties.$staticVars.leftMenu_foldOffW
+    // console.log("全局变量",b)
   }
 }
 
@@ -130,6 +148,7 @@ function childFoldAction(value){
 function useChildMehtod(){
   // 调用LeftMenu组件的pubMethod方法，并传入参数 "外部参数12"
   leftmenuRef.value.pubMethod("外部参数123")
+
 }
 
 </script>
@@ -144,8 +163,9 @@ function useChildMehtod(){
 }
 
 .left {
-  background-color: #545c64;
-  width: 200px;
+  background-color: white;
+  width: v-bind(leftMenuWidth);
+  /*width: var(--global:leftWid);*/
   height: 100%;
 }
 
