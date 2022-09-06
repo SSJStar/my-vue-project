@@ -1,21 +1,14 @@
-
 const staticVars = {
-    title:"this is global title",
-    leftMenu_foldOnW:"200px",
-    leftMenu_foldOffW:"64px",
-    // hello(){
-    //     console.log("Are you ok?")
-    // }
+    //定义属性
+    title: "this is global title",
+    LEFTMENU_FOLDONW: "200px",
+    LEFTMENU_FOLDOFFW: "64px",
+    BASE_URL: 'http://vue.wclimb.site/images/',
+    SOCKET_DOMAIN: 'https://xx.xx.com/filesystem/upload/',
+    //定义方法
+    run(){
+        console.log("Are you ok? I'm fine,thank you.")
+    }
 }
-
-// function he(){
-//     return {
-//         title:"this is title",
-//         leftMenu_foldOnW:"99px",
-//         leftMenu_foldOffW:"33px",
-//     }
-// }
-// //
-// // staticVars.leftMenu_foldOffW = "60px"
 
 export default staticVars

@@ -293,3 +293,222 @@ const handleClose = (key, keyPath) => {
   console.log(key, keyPath)
 }
 </script>
+
+
+
+
+
+<!--第四-->
+<!--<template>-->
+<!--  <div class="layout1_box">-->
+<!--    <header>-->
+<!--      <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">-->
+<!--        <el-radio-button :label="false">展开</el-radio-button>-->
+<!--        <el-radio-button :label="true">收起</el-radio-button>-->
+<!--      </el-radio-group>-->
+<!--    </header>-->
+<!--    <main class="main">-->
+<!--      <div class="left" :style="{ width: isCollapse ? '60px' : '200px' }">-->
+<!--        <el-menu-->
+<!--            default-active="1-4-1"-->
+<!--            class="el-menu-vertical-demo"-->
+<!--            @open="handleOpen"-->
+<!--            @close="handleClose"-->
+<!--            :collapse="isCollapse"-->
+<!--        >-->
+<!--          <el-menu-item index="2">-->
+<!--            <i class="el-icon-menu"></i>-->
+<!--            <span slot="title">导航二</span>-->
+<!--          </el-menu-item>-->
+<!--          <el-menu-item index="3" disabled>-->
+<!--            <i class="el-icon-document"></i>-->
+<!--            <span slot="title">导航三</span>-->
+<!--          </el-menu-item>-->
+<!--          <el-menu-item index="4">-->
+<!--            <i class="el-icon-setting"></i>-->
+<!--            <span slot="title">导航四</span>-->
+<!--          </el-menu-item>-->
+<!--        </el-menu>-->
+<!--      </div>-->
+<!--      <div class="right"></div>-->
+<!--    </main>-->
+<!--  </div>-->
+<!--</template>-->
+
+<!--<style>-->
+<!--.el-menu-vertical-demo:not(.el-menu&#45;&#45;collapse) {-->
+<!--  width: 200px;-->
+<!--  min-height: 400px;-->
+<!--}-->
+<!--.el-menu {-->
+<!--  border: none;-->
+<!--  height: 100%;-->
+<!--  text-align: center;-->
+<!--}-->
+<!--.layout1_box {-->
+<!--  height: 100%;-->
+<!--  width: 100%;-->
+<!--  background-color: gray;-->
+<!--}-->
+<!--.main {-->
+<!--  display: flex;-->
+<!--  height: calc(100% - 60px);-->
+<!--  width: 100%;-->
+<!--}-->
+
+<!--.left {-->
+<!--  width: 200px;-->
+<!--  background: blue;-->
+<!--  transition: width 0.5s;-->
+<!--  background-color: cadetblue;-->
+<!--}-->
+<!--.right {-->
+<!--  flex: 1;-->
+<!--  background: pink;-->
+<!--  height: 100%;-->
+<!--}-->
+<!--</style>-->
+
+<!--<script>-->
+<!--export default {-->
+<!--  data() {-->
+<!--    return {-->
+<!--      isCollapse: false,-->
+<!--    };-->
+<!--  },-->
+<!--  methods: {-->
+<!--    handleOpen(key, keyPath) {-->
+<!--      console.log(key, keyPath);-->
+<!--    },-->
+<!--    handleClose(key, keyPath) {-->
+<!--      console.log(key, keyPath);-->
+<!--    },-->
+<!--  },-->
+<!--};-->
+<!--</script>-->
+
+
+
+
+<!--5555-->
+<!--<template>-->
+<!--  <div class="main">-->
+<!--    <div class="left_main" :class="{ left_main_show: openStatus }">-->
+<!--      <el-menu-->
+<!--          id="elmenu"-->
+<!--          background-color="#545c64"-->
+<!--          text-color="#fff"-->
+<!--          active-text-color="#ffd04b"-->
+<!--          class="el-menu-vertical-demo"-->
+<!--          :collapse="openStatus"-->
+<!--      >-->
+<!--        <el-submenu index="1">-->
+<!--          <template slot="title">-->
+<!--            <i class="el-icon-location"></i>-->
+<!--            <span slot="title">导航一</span>-->
+<!--          </template>-->
+<!--          <el-menu-item-group>-->
+<!--            <span slot="title">分组一</span>-->
+<!--            <el-menu-item index="1-1">选项1</el-menu-item>-->
+<!--            <el-menu-item index="1-2">选项2</el-menu-item>-->
+<!--          </el-menu-item-group>-->
+<!--          <el-menu-item-group title="分组2">-->
+<!--            <el-menu-item index="1-3">选项3</el-menu-item>-->
+<!--          </el-menu-item-group>-->
+<!--          <el-submenu index="1-4">-->
+<!--            <span slot="title">选项4</span>-->
+<!--            <el-menu-item index="1-4-1">选项1</el-menu-item>-->
+<!--          </el-submenu>-->
+<!--        </el-submenu>-->
+<!--        <el-menu-item index="2">-->
+<!--          <i class="el-icon-menu"></i>-->
+<!--          <span slot="title">导航二</span>-->
+<!--        </el-menu-item>-->
+<!--        <el-menu-item index="3" disabled>-->
+<!--          <i class="el-icon-document"></i>-->
+<!--          <span slot="title">导航三</span>-->
+<!--        </el-menu-item>-->
+<!--        <el-menu-item index="4">-->
+<!--          <i class="el-icon-setting"></i>-->
+<!--          <span slot="title">导航四</span>-->
+<!--        </el-menu-item>-->
+<!--      </el-menu>-->
+<!--    </div>-->
+<!--    <div class="right_main">-->
+<!--      <div class="open_close">-->
+<!--        <i @click="change" v-if="open_close" class="el-icon-s-fold">open</i>-->
+<!--        <i @click="change" v-else class="el-icon-s-unfold">close</i>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</template>-->
+<!--<script>-->
+<!--export default {-->
+<!--  name: 'Always',-->
+<!--  data() {-->
+<!--    return {-->
+<!--      openStatus: false,-->
+<!--      open_close: true,-->
+<!--    }-->
+<!--  },-->
+<!--  methods: {-->
+<!--    change() {-->
+<!--      this.openStatus = !this.openStatus-->
+<!--      if (this.openStatus) {-->
+<!--        setTimeout(() => {-->
+<!--          this.open_close = false-->
+<!--        }, 1000)-->
+<!--      } else {-->
+<!--        setTimeout(() => {-->
+<!--          this.open_close = true-->
+<!--        }, 1000)-->
+<!--      }-->
+<!--    },-->
+<!--  },-->
+<!--}-->
+<!--</script>-->
+<!--<style scoped>-->
+<!--.main {-->
+<!--  display: flex;-->
+<!--  width: 100%;-->
+<!--  height: 100vh;-->
+
+
+
+
+<!--}-->
+<!--.left_main_show {-->
+<!--  width: 60px;-->
+<!--}-->
+
+<!--.right_main {-->
+<!--  flex: 1;-->
+<!--  background-color: cadetblue;-->
+<!--  position: relative;-->
+
+<!--}-->
+<!--.right_main .open_close {-->
+<!--  position: absolute;-->
+<!--  left: 0;-->
+<!--  top: 0;-->
+<!--  color: white;-->
+<!--  font-size: 24px;-->
+<!--}-->
+
+<!--.left_main {-->
+<!--  width: 180px;-->
+<!--  text-align: center;-->
+<!--  transition: width 1s;-->
+<!--  background-color: #545c64;-->
+<!--}-->
+<!--.left_main .el-menu {-->
+<!--  border: none;-->
+<!--  height: 100%;-->
+<!--  text-align: left;-->
+<!--}-->
+
+<!--/*//  关键，必须加上，否则在折叠时会出现第一个文字卡顿后消失*/-->
+<!--.left_main .el-menu:not(.el-menu&#45;&#45;collapse) {-->
+<!--      width: 100%;-->
+<!--    }-->
+<!--</style>-->

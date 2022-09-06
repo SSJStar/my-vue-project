@@ -370,57 +370,48 @@
 <!--这是一个for循环，遍历第一级-->
       <!-- 针对每一个item、item2，要判断它下面有没有子菜单，如果有就用el-sub-menu创建它，如果没有就用el-menu-创建它 -->
       <!-- 注意：item3作为第三级菜单，不再往下拓展-->
-      <div :index="item.index" v-for="item in listJson.list" :key="item.parent_id">
+      <div :index="item.index" v-for="item in listJson.list">
         <!--能进入这个v-if，表示这个一级菜单下面还有子菜单（二级菜单）-->
         <div v-if="item.childrens.length>0">
-          <el-sub-menu :index="item.index" :key="item.parent_id" >
+          <el-sub-menu :index="item.index" :key="item.id" >
             <!--   这里的item表示第一级菜单   -->
             <template #title>
-              <i class="el-icon-s-home"></i>
-              <span class="caidan-auth">{{ item.title }}</span>
+              <el-icon><icon-menu /></el-icon>
+              <span v-show="!isCollapse" class="caidan-auth">{{ item.title }}</span>
             </template>
 
             <!-- 这里展示二级菜单，没有子菜单（三级菜单）就用el-menu-item-->
-            <div v-if="item.childrens.length===0">
-              <el-menu-item :index="item2.index" v-for="item2 in item.childrens" :key="item2.id" @click="goUrl(item2.parent_id,item2.title,item2.index)">
-<!--                <h1>{{"===0:"+item.title+" ->"+item.childrens.length}}}</h1>-->
+            <div v-for="item2 in item.childrens">
+              <!--   此处v-if表示二级菜单下面，没有子菜单   -->
+              <div v-if="item2.childrens.length===0">
+                <el-menu-item :index="item2.index" :key="item2.id" @click="goUrl(item2.parent_id,item2.title,item2.index)">
+                  <el-icon><Setting /></el-icon>
+                  <span class="caidan-auth">{{ item2.title }}</span>
+                </el-menu-item>
+              </div>
+
+              <!--   此处v-else表示二级菜单下面，还有子菜单   -->
+              <div v-else>
                 <!--   这里的item2表示第二级菜单   -->
-                <i class="item.icons"></i>
-                <span class="caidan-auth">{{ item2.title }}</span>
-              </el-menu-item>
-            </div>
-
-            <!-- 这里展示二级菜单，有子菜单就用el-sub-menu-->
-            <!-- v-else跟上面的v-if是一对，这里表示二级菜单下面还有第三级菜单 -->
-            <div v-else>
-              <div v-for="item2 in item.childrens" :key="item2.parent_id">
-                <div v-if="item2.childrens.length>0">
-                  <!--   这里的item2表示第二级菜单   -->
-                  <el-sub-menu  :index="item2.index" :key="item2.parent_id">
-                    <template #title>
-                      <i class="el-icon-s-home"></i>
-                      <span class="caidan-auth">{{ item2.title }}</span>
-                    </template>
-                    <!--  这里展示三级菜单，三级菜单为最后一层，不再往下拓展（所以用el-menu-item）-->
-                    <el-menu-item  :index="item3.index" v-for="item3 in item2.childrens" :key="item3.id" @click="goUrl(item3.parent_id,item3.title,item3.index)">
-                      <i class="item.icons"></i>
-                      <span class="caidan-auth">{{ item3.title }}</span>
-                    </el-menu-item>
-                  </el-sub-menu>
-
-                </div>
-
-                <!--  v-else：如果二级菜单，没有子菜单-->
-                <div v-else>
-                  <!--            二级菜单下面没有子菜单，那二级菜单就用el-menu-item-->
-                  <el-menu-item :index="item2.index" :key="item2.id" @click="goUrl(item2.parent_id,item2.title,item2.index)">
-                    <!--              <h1>{{"===0:"+item2.title+" ->"+item2.childrens.length}}}</h1>-->
-                    <i class="item.icons"></i>
+                <el-sub-menu  :index="item2.index" :key="item2.id">
+                  <template #title>
+                    <el-icon><Setting /></el-icon>
                     <span class="caidan-auth">{{ item2.title }}</span>
+                  </template>
+                  <!--  这里展示三级菜单，三级菜单为最后一层，不再往下拓展（所以用el-menu-item）-->
+                  <el-menu-item  :index="item3.index" v-for="item3 in item2.childrens" :key="item3.id" @click="goUrl(item3.parent_id,item3.title,item3.index)">
+                    <el-icon><Location /></el-icon>
+                    <span class="caidan-auth">{{ item3.title }}</span>
                   </el-menu-item>
-                </div>
+                </el-sub-menu>
+
               </div>
             </div>
+<!--              <el-menu-item :index="item2.index" v-for="item2 in item.childrens" :key="item2.id" @click="goUrl(item2.parent_id,item2.title,item2.index)">-->
+<!--&lt;!&ndash;                <h1>{{"===0:"+item.title+" ->"+item.childrens.length}}}</h1>&ndash;&gt;-->
+<!--                -->
+<!--                -->
+<!--              </el-menu-item>-->
 
           </el-sub-menu>
         </div>
@@ -429,8 +420,8 @@
         <div v-else>
             <!-- 一级菜单下面没有子菜单，那一级菜单就用el-menu-item-->
             <el-menu-item :index="item.index" :key="item.id" @click="goUrl(item.parent_id,item.title,item.index)">
-              <i class="item.icons"></i>
-              <span class="caidan-auth">{{ item.title }}</span>
+              <el-icon><icon-menu /></el-icon>
+              <span v-show="!isCollapse" class="caidan-auth">{{ item.title }}</span>
             </el-menu-item>
         </div>
 
@@ -443,105 +434,141 @@
 
 
 <script setup>
-
+import {
+  Document,
+  Menu as IconMenu,
+  Location,
+  Setting,
+} from '@element-plus/icons-vue'//引入图标
 import {onUnmounted, onUpdated, ref} from "vue";
 
 // 折叠还是展开
 let isCollapse = ref( false)
 
+let displayValue = ref('block')
+
 // 菜单数据源
 let listJson = {
-  title:"列表数据",
-  list:[
+  title: "列表数据",
+  list: [
     {
-      index:"1",
+      index: "1",
       parent_id: "0",
-      iconName:"",
-      title:"浙江",
-      childrens:[
+      iconName: "",
+      title: "浙江",
+      childrens: [
         {
-          index:"1-1",
+          index: "1-1",
           parent_id: "1",
-          iconName:"",
-          title:"杭州",
-          childrens:[
+          iconName: "",
+          title: "杭州",
+          childrens: [
             {
-              index:"1-1-1",
+              index: "1-1-1",
               parent_id: "1-1",
-              iconName:"",
-              title:"西湖区",
-              childrens:[]
-            },{
-              index:"1-1-2",
+              iconName: "",
+              title: "西湖区",
+              childrens: []
+            }, {
+              index: "1-1-2",
               parent_id: "1-1",
-              iconName:"",
-              title:"滨江区",
-              childrens:[]
-            },{
-              index:"1-1-3",
+              iconName: "",
+              title: "滨江区",
+              childrens: []
+            }, {
+              index: "1-1-3",
               parent_id: "1-1",
-              iconName:"",
-              title:"商城区",
-              childrens:[]
+              iconName: "",
+              title: "商城区",
+              childrens: []
             },]
         },
         {
-          index:"1-2",
+          index: "1-2",
           parent_id: "1",
-          iconName:"",
-          title:"绍兴",
-          childrens:[]
+          iconName: "",
+          title: "绍兴",
+          childrens: []
         },
         {
-          index:"1-3",
+          index: "1-3",
           parent_id: "1",
-          iconName:"",
-          title:"宁波",
-          childrens:[]
+          iconName: "",
+          title: "宁波",
+          childrens: []
         },
         {
-          index:"1-4",
+          index: "1-4",
           parent_id: "1",
-          iconName:"",
-          title:"台州",
-          childrens:[]
+          iconName: "",
+          title: "台州",
+          childrens: [{
+            index: "1-4-1",
+            parent_id: "1-1",
+            iconName: "",
+            title: "温岭",
+            childrens: []
+          }, {
+            index: "1-4-2",
+            parent_id: "1-1",
+            iconName: "",
+            title: "临海",
+            childrens: []
+          },]
         },
       ]
     },
     {
-      index:"2",
+      index: "2",
       parent_id: "0",
-      iconName:"",
-      title:"上海",
-      childrens:[]
+      iconName: "",
+      title: "上海",
+      childrens: []
     },
     {
-      iconName:"3",
+      index: "3",
+      iconName: "",
       parent_id: "0",
-      title:"内蒙",
-      childrens:[
+      title: "内蒙",
+      childrens: [
         {
-          index:"3-1",
+          index: "3-1",
           parent_id: "3",
-          iconName:"",
-          title:"呼和浩特",
-          childrens:[]
+          iconName: "",
+          title: "呼和浩特",
+          childrens: []
         },
         {
-          index:"3-2",
+          index: "3-2",
           parent_id: "3",
-          iconName:"",
-          title:"包头",
-          childrens:[]
+          iconName: "",
+          title: "包头",
+          childrens: []
         },
         {
-          index:"3-3",
+          index: "3-3",
           parent_id: "3",
-          iconName:"",
-          title:"乌海",
-          childrens:[]
+          iconName: "",
+          title: "乌海",
+          childrens: [
+            {
+              index: "3-3-1",
+              parent_id: "3-3",
+              iconName: "",
+              title: "乌海市博物馆",
+              childrens: []
+            },
+            {
+              index: "3-3-2",
+              parent_id: "3-3",
+              iconName: "",
+              title: "黄河西行客栈",
+              childrens: []
+            }
+          ]
         },]
     },
+
   ]
 }
 
@@ -555,8 +582,8 @@ let listJson = {
  * @param parent_id {string}  被点击菜单-》index
  * @return void
  */
-function goUrl(parent_id,title,index){
-  alert(title+"，id是"+index)
+function goUrl(parent_id, title, index) {
+  alert(title + "，id是" + index)
 }
 
 /**
@@ -602,6 +629,11 @@ function zhedie() {
   isCollapse.value = !isCollapse.value
   //告诉调用者，展开还是收起
   emit("change",!isCollapse.value)
+  if (isCollapse.value){
+    displayValue.value = "none"
+  }else {
+    displayValue.value = "block"
+  }
 }
 
 //定义方法，并暴露给外界调用
@@ -616,18 +648,70 @@ defineExpose({pubMethod})
 /*去掉el-menu右侧 - 白色边框线*/
 .el-menu{
   border: 0!important;
+  height: 100%;
+  text-align: center;
 }
 
-/*菜单关闭*/
-.el-submenu /deep/ .el-submenu__title .el-submenu__icon-arrow{
-  -webkit-transform: rotateZ(-90deg);
-  -ms-transform: rotate(-90deg);
-  transform: rotateZ(-90deg);
+/*.el-menu-vertical:not(.el-menu--collapse) {*/
+/*  width: 200px;*/
+/*  :deep(.el-sub-menu__icon-arrow){*/
+/*    display: block;*/
+/*  }*/
+/*}*/
+/*.el-menu-vertical {*/
+/*  font-weight: bold;*/
+/*  box-shadow: 0 0 10px rgba(0 0 0 / 20%);*/
+/*  height: calc(100vh - 40px);*/
+/*  z-index: 10;*/
+/*:deep(.el-sub-menu__icon-arrow){*/
+/*  display: none;*/
+/*}*/
+/*}*/
+
+/*设置三角形显示还是隐藏，通过绑定响应式变量displayValue来控制*/
+.el-menu .el-sub-menu__icon-arrow{
+  display: v-bind(displayValue);
 }
-/*菜单展开*/
-.el-submenu.is-opened /deep/ .el-submenu__title .el-submenu__icon-arrow {
-  -webkit-transform: rotateZ(0deg);
-  -ms-transform: rotate(0deg);
-  transform: rotateZ(0deg);
+.el-menu .el-sub-menu__icon-arrow:deep(isCollapse){
+  /*display: [isCollapse?none:block];*/
+  display: none;
 }
+
+/*.el-menu .el-sub-menu__icon-arrow:deep(.el-sub-menu__icon-arrow){*/
+/*  display: none;*/
+/*}*/
+/*.el-menu .el-sub-menu__icon-arrow:not(.el-menu--collapse){*/
+/*  display: block;*/
+/*}*/
+/*.el-menu .el-sub-menu__icon-arrow:deep(.el-menu--collapse){*/
+/*  display: none;*/
+/*}*/
+
+
+
+
+
+
+/*!*隐藏文字*!*/
+/*.el-menu--collapse .el-submenu__title span{*/
+/*  display: none;*/
+/*}*/
+/*!*隐藏 > *!*/
+/*.el-menu--collapse .el-submenu__title .el-submenu__icon-arrow{*/
+/*  display: none;*/
+/*}*/
+
+/*!*菜单关闭*!*/
+/*.el-submenu /deep/ .el-submenu__title .el-submenu__icon-arrow{*/
+/*  -webkit-transform: rotateZ(-90deg);*/
+/*  -ms-transform: rotate(-90deg);*/
+/*  transform: rotateZ(-90deg);*/
+/*}*/
+/*!*菜单展开*!*/
+/*.el-submenu.is-opened /deep/ .el-submenu__title .el-submenu__icon-arrow {*/
+/*  -webkit-transform: rotateZ(0deg);*/
+/*  -ms-transform: rotate(0deg);*/
+/*  transform: rotateZ(0deg);*/
+/*}*/
+
 </style>

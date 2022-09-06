@@ -103,8 +103,8 @@ import { getCurrentInstance } from 'vue'
 const { proxy } = getCurrentInstance()
 // const currentInstance = getCurrentInstance()
 
-let foldOnW = proxy.$staticVars.leftMenu_foldOnW
-let foldOffW = proxy.$staticVars.leftMenu_foldOffW
+let foldOnW = proxy.$staticVars.LEFTMENU_FOLDONW
+let foldOffW = proxy.$staticVars.LEFTMENU_FOLDOFFW
 
 //响应式变量，要这么写
 let leftMenuWidth = ref('200px')
@@ -121,20 +121,13 @@ const leftmenuRef = ref(null)
  * @return {void}
  */
 function childFoldAction(value){
-  console.log("全局变量title:",proxy.$staticVars.title)
   if(value){
     console.log("这是响应子组件方法：展开");
     leftMenuWidth.value = foldOnW//同步更新LeftMenu宽度
-
-    console.log("全局变量",foldOnW)
-    // proxy.$hello()
   }else {
     console.log("这是响应子组件方法： 收起");
     leftMenuWidth.value = foldOffW//同步更新LeftMenu宽度
-    console.log("全局变量",foldOffW)
-
     // let b = currentInstance.appContext.config.globalProperties.$staticVars.leftMenu_foldOffW
-    // console.log("全局变量",b)
   }
 }
 
@@ -148,7 +141,6 @@ function childFoldAction(value){
 function useChildMehtod(){
   // 调用LeftMenu组件的pubMethod方法，并传入参数 "外部参数12"
   leftmenuRef.value.pubMethod("外部参数123")
-
 }
 
 </script>
