@@ -97,14 +97,13 @@ export default {
 
 <script setup>
 import {ref} from "vue";
-import { getCurrentInstance } from 'vue'
 
-// 使用proxy代替ctx，因为ctx只在开发环境有效
-const { proxy } = getCurrentInstance()
-// const currentInstance = getCurrentInstance()
+import staticVars from "@/statics/global";
 
-let foldOnW = proxy.$staticVars.LEFTMENU_FOLDONW
-let foldOffW = proxy.$staticVars.LEFTMENU_FOLDOFFW
+
+let foldOnW = staticVars.LEFTMENU_FOLDONW
+
+let foldOffW = staticVars.LEFTMENU_FOLDOFFW
 
 //响应式变量，要这么写
 let leftMenuWidth = ref('200px')
@@ -162,8 +161,10 @@ function useChildMehtod(){
 }
 
 .router-div {
-  width: calc(100% - 280px);
+  /*width: v-bind(100% - leftMenuWidth);*/
+  flex: 1;
   height: calc(100% - 71px);
   background-color: gray;
+  /*position: relative;*/
 }
 </style>

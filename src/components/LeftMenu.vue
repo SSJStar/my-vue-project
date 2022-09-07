@@ -357,11 +357,16 @@
 
 <template>
 <!--  <el-button style="width: 100%;height: 20px;margin: 0;padding: 0;background-color: #2c3e50;color: white;padding: 0;margin: 0;" @click="zhedie">折叠</el-button>-->
-  <el-button @click="zhedie">折叠</el-button>
+<!--  <el-button @click="zhedie">折叠</el-button>-->
+
+<!--  <div  class="foldIcon" style="background-color:v-bind(foldIconColor);">-->
+  <div  class="foldIcon">
+    <el-icon @click="zhedie"><icon-menu /></el-icon>
+  </div>
   <el-container>
     <el-aside :width="isCollapse ? foldOff_width:foldOn_width">
     <el-menu active-text-color="#ffd04b"
-    background-color="#545c64"
+    v-bind:background-color="staticVars.BACKGROUNBD_COLOR"
     class="el-menu-vertical-demo"
     default-active="4"
     text-color="#fff"
@@ -377,6 +382,9 @@
             <!--   这里的item表示第一级菜单   -->
             <template #title>
               <el-icon><icon-menu /></el-icon>
+<!--              <el-icon><comment :is="HomeFilled" /></el-icon>-->
+<!--              {{item.iconName}}-->
+<!--              <component  v-bind:is="item.iconName" style="width: 13px;height: 13px;"></component>-->
               <span v-show="!isCollapse" class="caidan-auth">{{ item.title }}</span>
             </template>
 
@@ -407,12 +415,6 @@
 
               </div>
             </div>
-<!--              <el-menu-item :index="item2.index" v-for="item2 in item.childrens" :key="item2.id" @click="goUrl(item2.parent_id,item2.title,item2.index)">-->
-<!--&lt;!&ndash;                <h1>{{"===0:"+item.title+" ->"+item.childrens.length}}}</h1>&ndash;&gt;-->
-<!--                -->
-<!--                -->
-<!--              </el-menu-item>-->
-
           </el-sub-menu>
         </div>
 
@@ -420,7 +422,8 @@
         <div v-else>
             <!-- 一级菜单下面没有子菜单，那一级菜单就用el-menu-item-->
             <el-menu-item :index="item.index" :key="item.id" @click="goUrl(item.parent_id,item.title,item.index)">
-              <el-icon><icon-menu /></el-icon>
+<!--              <el-icon><icon-menu /></el-icon>-->
+              <el-icon><comment :is="item.iconName" /></el-icon>
               <span v-show="!isCollapse" class="caidan-auth">{{ item.title }}</span>
             </el-menu-item>
         </div>
@@ -435,17 +438,31 @@
 
 <script setup>
 import {
+  HomeFilled,
   Document,
   Menu as IconMenu,
   Location,
   Setting,
 } from '@element-plus/icons-vue'//引入图标
 import {onUnmounted, onUpdated, ref} from "vue";
-
+import staticVars from "@/statics/global";
+console.log(staticVars.LEFTMENU_FOLDONW)
 // 折叠还是展开
 let isCollapse = ref( false)
 
 let displayValue = ref('block')
+
+let foldIconColor = staticVars.BACKGROUNBD_COLOR
+
+/* 在 <script setup> 中必须使用 defineProps 和 defineEmits API 来声明 props 和 emits ，
+ * 它们具备完整的类型推断并且在 <script setup> 中是直接可用的：
+ */
+const emit = defineEmits(['change',])
+const props = defineProps({
+  foo: String,
+  foldOn_width: String,//展开时的宽度
+  foldOff_width: String,//收起时的宽度
+})
 
 // 菜单数据源
 let listJson = {
@@ -454,7 +471,7 @@ let listJson = {
     {
       index: "1",
       parent_id: "0",
-      iconName: "",
+      iconName: "HomeFilled",
       title: "浙江",
       childrens: [
         {
@@ -521,13 +538,13 @@ let listJson = {
     {
       index: "2",
       parent_id: "0",
-      iconName: "",
+      iconName: "icon-menu",
       title: "上海",
       childrens: []
     },
     {
       index: "3",
-      iconName: "",
+      iconName: "icon-menu",
       parent_id: "0",
       title: "内蒙",
       childrens: [
@@ -612,28 +629,18 @@ const handleClose = (key, keyPath) => {
   console.log("handleClose--"+key, keyPath)
 }
 
-/* 在 <script setup> 中必须使用 defineProps 和 defineEmits API 来声明 props 和 emits ，
- * 它们具备完整的类型推断并且在 <script setup> 中是直接可用的：
- */
-const emit = defineEmits(['change',])
-const props = defineProps({
-  foo: String,
-  foldOn_width: String,//展开时的宽度
-  foldOff_width: String,//收起时的宽度
-  // isFoldPrivate: true //是否使用自带折叠按钮
-})
-
 //折叠方法
 function zhedie() {
   // console.log("执行zhedie方法")
   isCollapse.value = !isCollapse.value
-  //告诉调用者，展开还是收起
-  emit("change",!isCollapse.value)
+  //修改displayValue值，控制三角形的显示或隐藏
   if (isCollapse.value){
     displayValue.value = "none"
   }else {
     displayValue.value = "block"
   }
+  //告诉调用者，展开还是收起
+  emit("change",!isCollapse.value)
 }
 
 //定义方法，并暴露给外界调用
@@ -645,6 +652,11 @@ defineExpose({pubMethod})
 </script>
 
 <style>
+/*折叠按钮*/
+.foldIcon{
+  background-color:v-bind(foldIconColor);
+}
+
 /*去掉el-menu右侧 - 白色边框线*/
 .el-menu{
   border: 0!important;
@@ -652,66 +664,13 @@ defineExpose({pubMethod})
   text-align: center;
 }
 
-/*.el-menu-vertical:not(.el-menu--collapse) {*/
-/*  width: 200px;*/
-/*  :deep(.el-sub-menu__icon-arrow){*/
-/*    display: block;*/
-/*  }*/
-/*}*/
-/*.el-menu-vertical {*/
-/*  font-weight: bold;*/
-/*  box-shadow: 0 0 10px rgba(0 0 0 / 20%);*/
-/*  height: calc(100vh - 40px);*/
-/*  z-index: 10;*/
-/*:deep(.el-sub-menu__icon-arrow){*/
-/*  display: none;*/
-/*}*/
-/*}*/
-
-/*设置三角形显示还是隐藏，通过绑定响应式变量displayValue来控制*/
+/*设置三角形显示还是隐藏，由响应式变量displayValue来控制*/
 .el-menu .el-sub-menu__icon-arrow{
   display: v-bind(displayValue);
 }
-.el-menu .el-sub-menu__icon-arrow:deep(isCollapse){
-  /*display: [isCollapse?none:block];*/
-  display: none;
-}
-
-/*.el-menu .el-sub-menu__icon-arrow:deep(.el-sub-menu__icon-arrow){*/
+/*.el-menu .el-sub-menu__icon-arrow:deep(isCollapse){*/
+/*  !*display: [isCollapse?none:block];*!*/
 /*  display: none;*/
-/*}*/
-/*.el-menu .el-sub-menu__icon-arrow:not(.el-menu--collapse){*/
-/*  display: block;*/
-/*}*/
-/*.el-menu .el-sub-menu__icon-arrow:deep(.el-menu--collapse){*/
-/*  display: none;*/
-/*}*/
-
-
-
-
-
-
-/*!*隐藏文字*!*/
-/*.el-menu--collapse .el-submenu__title span{*/
-/*  display: none;*/
-/*}*/
-/*!*隐藏 > *!*/
-/*.el-menu--collapse .el-submenu__title .el-submenu__icon-arrow{*/
-/*  display: none;*/
-/*}*/
-
-/*!*菜单关闭*!*/
-/*.el-submenu /deep/ .el-submenu__title .el-submenu__icon-arrow{*/
-/*  -webkit-transform: rotateZ(-90deg);*/
-/*  -ms-transform: rotate(-90deg);*/
-/*  transform: rotateZ(-90deg);*/
-/*}*/
-/*!*菜单展开*!*/
-/*.el-submenu.is-opened /deep/ .el-submenu__title .el-submenu__icon-arrow {*/
-/*  -webkit-transform: rotateZ(0deg);*/
-/*  -ms-transform: rotate(0deg);*/
-/*  transform: rotateZ(0deg);*/
 /*}*/
 
 </style>
