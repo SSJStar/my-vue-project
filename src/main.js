@@ -28,3 +28,4 @@ app.use(router).mount('#app')
 //全局注册组件 - GlobalView
 import GlobalView from '@/components/GlobalView'
 app.component("GlobalView",GlobalView)
+

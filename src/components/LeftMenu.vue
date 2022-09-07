@@ -356,12 +356,8 @@
 
 
 <template>
-<!--  <el-button style="width: 100%;height: 20px;margin: 0;padding: 0;background-color: #2c3e50;color: white;padding: 0;margin: 0;" @click="zhedie">折叠</el-button>-->
-<!--  <el-button @click="zhedie">折叠</el-button>-->
-
-<!--  <div  class="foldIcon" style="background-color:v-bind(foldIconColor);">-->
   <div  class="foldIcon">
-    <el-icon @click="zhedie"><icon-menu /></el-icon>
+    <img  @click="zhedie" v-bind:src="foldImageName"/>
   </div>
   <el-container>
     <el-aside :width="isCollapse ? foldOff_width:foldOn_width">
@@ -381,10 +377,13 @@
           <el-sub-menu :index="item.index" :key="item.id" >
             <!--   这里的item表示第一级菜单   -->
             <template #title>
-              <el-icon><icon-menu /></el-icon>
-<!--              <el-icon><comment :is="HomeFilled" /></el-icon>-->
-<!--              {{item.iconName}}-->
-<!--              <component  v-bind:is="item.iconName" style="width: 13px;height: 13px;"></component>-->
+              <el-icon>
+                <!--  <icon-menu /> -->
+                <!--  上面这行使用的是element-plus自带图标库，下面这行使用的我们自己导入到项目的图片
+                      利用v-bind将item.iconName的图片路径赋值给src，请注意：路径需要用require()包裹住
+                -->
+                <img class="icon-style" v-bind:src="item.iconName"/>
+              </el-icon>
               <span v-show="!isCollapse" class="caidan-auth">{{ item.title }}</span>
             </template>
 
@@ -422,8 +421,9 @@
         <div v-else>
             <!-- 一级菜单下面没有子菜单，那一级菜单就用el-menu-item-->
             <el-menu-item :index="item.index" :key="item.id" @click="goUrl(item.parent_id,item.title,item.index)">
-<!--              <el-icon><icon-menu /></el-icon>-->
-              <el-icon><comment :is="item.iconName" /></el-icon>
+              <el-icon>
+                <img class="icon-style" v-bind:src="item.iconName"/>
+              </el-icon>
               <span v-show="!isCollapse" class="caidan-auth">{{ item.title }}</span>
             </el-menu-item>
         </div>
@@ -446,11 +446,15 @@ import {
 } from '@element-plus/icons-vue'//引入图标
 import {onUnmounted, onUpdated, ref} from "vue";
 import staticVars from "@/statics/global";
+
 console.log(staticVars.LEFTMENU_FOLDONW)
 // 折叠还是展开
 let isCollapse = ref( false)
 
 let displayValue = ref('block')
+
+// （展开 ｜ 收起）图片路径
+let foldImageName = ref(require("/src/assets/menu/icon-menu-shouqi.png"))
 
 let foldIconColor = staticVars.BACKGROUNBD_COLOR
 
@@ -471,7 +475,7 @@ let listJson = {
     {
       index: "1",
       parent_id: "0",
-      iconName: "HomeFilled",
+      iconName: require("/src/assets/home/icon-home.png"),
       title: "浙江",
       childrens: [
         {
@@ -538,13 +542,13 @@ let listJson = {
     {
       index: "2",
       parent_id: "0",
-      iconName: "icon-menu",
+      iconName: require("/src/assets/home/icon-home.png"),
       title: "上海",
       childrens: []
     },
     {
       index: "3",
-      iconName: "icon-menu",
+      iconName: require("/src/assets/home/icon-home.png"),
       parent_id: "0",
       title: "内蒙",
       childrens: [
@@ -636,8 +640,10 @@ function zhedie() {
   //修改displayValue值，控制三角形的显示或隐藏
   if (isCollapse.value){
     displayValue.value = "none"
+    foldImageName.value = require("/src/assets/menu/icon-menu-zhankai.png")
   }else {
     displayValue.value = "block"
+    foldImageName.value = require("/src/assets/menu/icon-menu-shouqi.png")
   }
   //告诉调用者，展开还是收起
   emit("change",!isCollapse.value)
@@ -652,9 +658,26 @@ defineExpose({pubMethod})
 </script>
 
 <style>
+/*设置 - 每一级别的菜单图标大小*/
+.el-icon .icon-style{
+  width: 13px;height: 13px;
+}
+
+
+
 /*折叠按钮*/
 .foldIcon{
+  height: 30px;
   background-color:v-bind(foldIconColor);
+  /*设置子元素 - 水平垂直居中*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*设置 - 折叠图标大小*/
+.foldIcon img {
+  width: 16px;height: 16px;
 }
 
 /*去掉el-menu右侧 - 白色边框线*/

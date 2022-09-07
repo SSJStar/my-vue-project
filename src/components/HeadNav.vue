@@ -41,17 +41,17 @@
 <template>
   <div class="head-nav">
 这是头部
-    <el-page-header>
-      <!-- Line 1 -->
-      <template #breadcrumb />
-      <!-- Line 2 -->
-      <template #icon />
-      <template #title />
-      <template #content />
-      <template #extra />
-      <!-- Lines after 2 -->
-      <template #default />
-    </el-page-header>
+<!--    <el-page-header>-->
+<!--      &lt;!&ndash; Line 1 &ndash;&gt;-->
+<!--      <template #breadcrumb />-->
+<!--      &lt;!&ndash; Line 2 &ndash;&gt;-->
+<!--      <template #icon />-->
+<!--      <template #title />-->
+<!--      <template #content />-->
+<!--      <template #extra />-->
+<!--      &lt;!&ndash; Lines after 2 &ndash;&gt;-->
+<!--      <template #default />-->
+<!--    </el-page-header>-->
   </div>
 </template>
 

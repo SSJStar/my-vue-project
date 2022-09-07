@@ -50,7 +50,8 @@
           <LeftMenu @change="childFoldAction" ref="leftmenuRef" v-bind:foldOn_width="foldOnW" v-bind:foldOff_width="foldOffW"></LeftMenu>
         </div>
         <div class="router-div">
-          <PersonInfoView></PersonInfoView>
+          <MainView></MainView>
+<!--          <PersonInfoView></PersonInfoView>-->
         </div>
       </div>
 <!--    </el-row>-->
@@ -73,13 +74,14 @@ import LeftMenu from '../components/LeftMenu'
 // import {nextTick, reactive} from "vue/dist/vue";
 // import HelloWorld from '@/components/HelloWorld.vue'
 import PersonInfoView from '@/views/PersonInfoView.vue'
+import MainView from '@/views/Main.vue'
 export default {
   name:'Home',
   components: {
     HeadNav,
     LeftMenu,
     // HelloWorld
-    PersonInfoView,
+    MainView,
   },
 
 
@@ -97,13 +99,17 @@ export default {
 
 <script setup>
 import {ref} from "vue";
-
 import staticVars from "@/statics/global";
 
-
+//菜单-展开宽度
 let foldOnW = staticVars.LEFTMENU_FOLDONW
 
+//菜单-收起宽度
 let foldOffW = staticVars.LEFTMENU_FOLDOFFW
+
+//我晕，样式里不能直接使用右边的，所以这里定义一个常量接收，然后再使用
+// 更诡异的是，直接使用staticVars.BACKGROUNBD_COLOR虽然会报错误，但是浏览器可以正常运行。。。
+const leftMenuBgColor = staticVars.BACKGROUNBD_COLOR
 
 //响应式变量，要这么写
 let leftMenuWidth = ref('200px')
@@ -157,6 +163,7 @@ function useChildMehtod(){
   background-color: white;
   width: v-bind(leftMenuWidth);
   /*width: var(--global:leftWid);*/
+  background-color: v-bind(leftMenuBgColor);
   height: 100%;
 }
 
