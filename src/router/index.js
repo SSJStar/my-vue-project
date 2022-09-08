@@ -1,25 +1,34 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import Home from '../views/Home.vue'
-import LoginView from "@/views/Login";
+// import Home from '../views/Home.vue'
+// import LoginView from "@/views/Login";
 const routes = [
   {
     path: '/',
     name: 'loginView',
-    component: LoginView
+    component: import(/* webpackChunkName: "about" */ '../views/Login')
   },
   {
     path: '/home',
     name: 'home',
-    // component: () => import(/* webpackChunkName: "about" */ '../views/Home')
-    component: Home
+    component: () => import(/* webpackChunkName: "about" */ '../views/Home')
+    // component: Home
   },
   {
     path: '/homeView',
     name: 'homeView',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    children:[
+      {
+        path: '/mainView',
+        name: 'mainView',
+        component: () => import(/* webpackChunkName: "about" */ '../views/MainView')
+      },
+      {
+        path: '/myView',
+        name: 'myView',
+        component: () => import(/* webpackChunkName: "about" */ '../views/My')
+      },
+    ],
     component: HomeView
   },
   {
@@ -41,6 +50,11 @@ const routes = [
     path: '/father',
     name: 'father',
     component: () => import(/* webpackChunkName: "about" */ '../views/FatherView')
+  },
+  {
+    path: '/mainView',
+    name: 'mainView',
+    component: () => import(/* webpackChunkName: "about" */ '../views/MainView')
   },
 ]
 

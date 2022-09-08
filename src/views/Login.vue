@@ -84,6 +84,10 @@ let identifyCode = ref('3212')//当前随机数，初始值为3212
 
 //登录按钮 - 点击
 function loginActionFunc() {
+  router.replace("/home")
+  return
+
+
   // const  e = ref(uName)
   // console.log("点击了按钮:"+e.value)
   // //     let  uName = ref(null)

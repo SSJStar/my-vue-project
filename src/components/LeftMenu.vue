@@ -461,137 +461,15 @@ let foldIconColor = staticVars.BACKGROUNBD_COLOR
 /* 在 <script setup> 中必须使用 defineProps 和 defineEmits API 来声明 props 和 emits ，
  * 它们具备完整的类型推断并且在 <script setup> 中是直接可用的：
  */
-const emit = defineEmits(['change',])
+const emit = defineEmits(['change','selected'])
 const props = defineProps({
   foo: String,
   foldOn_width: String,//展开时的宽度
   foldOff_width: String,//收起时的宽度
+  listJson:Object,//菜单数据源
 })
 
-// 菜单数据源
-let listJson = {
-  title: "列表数据",
-  list: [
-    {
-      index: "1",
-      parent_id: "0",
-      iconName: require("/src/assets/home/icon-home.png"),
-      title: "浙江",
-      childrens: [
-        {
-          index: "1-1",
-          parent_id: "1",
-          iconName: "",
-          title: "杭州",
-          childrens: [
-            {
-              index: "1-1-1",
-              parent_id: "1-1",
-              iconName: "",
-              title: "西湖区",
-              childrens: []
-            }, {
-              index: "1-1-2",
-              parent_id: "1-1",
-              iconName: "",
-              title: "滨江区",
-              childrens: []
-            }, {
-              index: "1-1-3",
-              parent_id: "1-1",
-              iconName: "",
-              title: "商城区",
-              childrens: []
-            },]
-        },
-        {
-          index: "1-2",
-          parent_id: "1",
-          iconName: "",
-          title: "绍兴",
-          childrens: []
-        },
-        {
-          index: "1-3",
-          parent_id: "1",
-          iconName: "",
-          title: "宁波",
-          childrens: []
-        },
-        {
-          index: "1-4",
-          parent_id: "1",
-          iconName: "",
-          title: "台州",
-          childrens: [{
-            index: "1-4-1",
-            parent_id: "1-1",
-            iconName: "",
-            title: "温岭",
-            childrens: []
-          }, {
-            index: "1-4-2",
-            parent_id: "1-1",
-            iconName: "",
-            title: "临海",
-            childrens: []
-          },]
-        },
-      ]
-    },
-    {
-      index: "2",
-      parent_id: "0",
-      iconName: require("/src/assets/home/icon-home.png"),
-      title: "上海",
-      childrens: []
-    },
-    {
-      index: "3",
-      iconName: require("/src/assets/home/icon-home.png"),
-      parent_id: "0",
-      title: "内蒙",
-      childrens: [
-        {
-          index: "3-1",
-          parent_id: "3",
-          iconName: "",
-          title: "呼和浩特",
-          childrens: []
-        },
-        {
-          index: "3-2",
-          parent_id: "3",
-          iconName: "",
-          title: "包头",
-          childrens: []
-        },
-        {
-          index: "3-3",
-          parent_id: "3",
-          iconName: "",
-          title: "乌海",
-          childrens: [
-            {
-              index: "3-3-1",
-              parent_id: "3-3",
-              iconName: "",
-              title: "乌海市博物馆",
-              childrens: []
-            },
-            {
-              index: "3-3-2",
-              parent_id: "3-3",
-              iconName: "",
-              title: "黄河西行客栈",
-              childrens: []
-            }
-          ]
-        },]
-    },
 
-  ]
-}
 
 /**
  * 点击了菜单
@@ -605,6 +483,8 @@ let listJson = {
  */
 function goUrl(parent_id, title, index) {
   alert(title + "，id是" + index)
+  //通知父视图，点击了哪个index
+  emit('selected',index)
 }
 
 /**

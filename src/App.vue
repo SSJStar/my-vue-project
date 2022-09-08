@@ -10,16 +10,20 @@
 <!--      <el-button>el-button</el-button>-->
 <!--    </div>-->
 <!--    <HelloWorld msg="Welcome to Your Vue.js App"/>-->
+
     <router-view/>
+<!--    <Login></Login>-->
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import Login from "@/views/Login";
 
 export default {
   name: 'app',
   components: {
+    Login,
     HelloWorld
   }
 }
