@@ -56,6 +56,11 @@ const routes = [
     name: 'mainView',
     component: () => import(/* webpackChunkName: "about" */ '../views/MainView')
   },
+  {
+    path: '/xlsxView',
+    name: 'xlsxView',
+    component: () => import(/* webpackChunkName: "about" */ '../views/XlsxView')
+  },
 ]
 
 const router = createRouter({

@@ -13,7 +13,8 @@
     "element-plus": "^2.2.13",
     "vform3-builds": "^3.0.8",
     "vue": "^3.2.13",
-    "vue-router": "^4.0.3"
+    "vue-router": "^4.0.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
