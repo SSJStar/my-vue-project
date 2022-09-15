@@ -61,6 +61,11 @@ const routes = [
     name: 'xlsxView',
     component: () => import(/* webpackChunkName: "about" */ '../views/XlsxView')
   },
+  {//饼图
+    path: '/btChatView',
+    name: 'btChatView',
+    component: () => import(/* webpackChunkName: "about" */ '../views/BTChatView')
+  },
 ]
 
 const router = createRouter({
