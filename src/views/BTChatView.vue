@@ -91,7 +91,7 @@ console.log("ssssssss:"+arr[0][1])
       // console.log("list1--"+ list[0]" ");
       console.log("开始二次渲染")
 
-      doubleHistogram.value.updateChatCustom();
+      doubleHistogram.value.updateChatCustom(xAxis_data_value.value, yAxis_data_left_value.value, yAxis_data_right_value.value,legend_left_value.value,legend_right_value.value);
 
     }).catch( err =>{
       // this.err = err;

@@ -7,20 +7,16 @@ import transformSheets from '@/views/read_xlsx';
 const main = ref(); // 使用ref创建虚拟DOM引用，使用时用main.value
 
 
-// let xAxis_data = ref(["数据加载中，请等待"]) //x轴数据
-// let yAxis_data_left = ref(["0"]) //y轴数据 - 左边
-// let yAxis_data_right = ref(["0"]) //y轴数据 - 右边
-
-
 const emit = defineEmits(['click'])
 const props = defineProps({
   xAxis_data: Array,//x轴数据
   yAxis_data_left: Array,//y轴数据 - 左边
   yAxis_data_right:Array,//y轴数据 - 右边
-  legend_left: String,//图例 - 左
+  legend_left: {type: String,default:""},//图例 - 左
   legend_right: String,//图例 - 右
 
 })
+
 
 onBeforeMount(()=>{
 
@@ -41,7 +37,7 @@ onMounted(() => {
  * 时间：2022/09/15 15:34:23
  * @return {void}
  */
-function updateChatCustom(){
+function updateChatCustom(x_data, y_data_left, y_data_right, legend_left, legend_right){
   // 指定图表的配置项和数据
   let option = {
     title: {
@@ -55,7 +51,7 @@ function updateChatCustom(){
       data: [props.legend_left,props.legend_right], //图例
     },
     xAxis: {
-      data: props.xAxis_data,
+      data: x_data,//props.xAxis_data,
       // axisLine:{
       //   symbol:"arrow",
       //   lineStyle:{
@@ -66,7 +62,7 @@ function updateChatCustom(){
     yAxis: [
       {
         type:"value",
-        name: props.legend_left,
+        name: legend_left,//props.legend_left,
         splitLine:{show:true},
         // nameLocation:"middle",
         // nameGap:170,
@@ -76,7 +72,7 @@ function updateChatCustom(){
       },
       {
         type:"value",
-        name: props.legend_right,
+        name: legend_right,//props.legend_right,
         splitLine:{show:true},
         // nameLocation:"right",
         // nameGap:150,
@@ -87,16 +83,16 @@ function updateChatCustom(){
     ],
     series: [
       {
-        name: props.legend_left,
+        name: legend_left,//props.legend_left,
         type: 'bar',
         yAxisIndex: 0,
-        data: props.yAxis_data_left
+        data: y_data_left,//props.yAxis_data_left
       },
       {
-        name: props.legend_right,
+        name: legend_right,//props.legend_right,
         type: 'bar',
         yAxisIndex: 1,
-        data: props.yAxis_data_right
+        data: y_data_right,//props.yAxis_data_right
       }
     ]
   };
@@ -110,7 +106,7 @@ function init() {
   myChart = echarts.init(document.getElementById('main'));
 
   // 指定图表的配置项和数据,并显示图表。
-  updateChatCustom()
+  updateChatCustom(props.xAxis_data, props.yAxis_data_left, props.yAxis_data_right, props.legend_left, props.legend_right)
 
   myChart.on('click', function(params) {
     console.log("value----"+params["value"])
