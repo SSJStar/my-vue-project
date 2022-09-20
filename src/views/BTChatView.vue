@@ -1,126 +1,42 @@
+<template>
+  <div id="main" style="width: 600px;height:400px;">
+    <SSJHistogramView ref="doubleHistogram" :config="histogram_config"></SSJHistogramView>
+  </div>
+</template>
 
 <script setup>
-import {ref, onMounted, onBeforeMount} from "vue";
-//  按需引入 echarts
-// import * as echarts from "echarts";
+// import声明
+import {ref, onMounted} from "vue";
 import transformSheets from './read_xlsx';
+import SSJHistogramView from '@/components/chats/SSJHistogramView'
+import SSJEchatConfig from "@/components/chats/ssjChatClass";
 
-import DoubleHistogramView from '@/components/chats/DoubleHistogramView'
-import EchatConfig from "@/components/chats/chatClass";
-
-
-const main = ref(); // 使用ref创建虚拟DOM引用，使用时用main.value
+// 拿到SSJHistogramView组件实例
 const doubleHistogram = ref(null)
 
-let  xAxis_data_value = ref(['正在初始化数据'])//x轴数据  数据加载中，请等待
+// 定义一些变量
+let xAxis_data_value = ref(['正在初始化数据'])//x轴数据  数据加载中，请等待
 let yAxis_data_left_value = ref([0])//y轴数据 - 左边
 let yAxis_data_right_value = ref([0])//y轴数据 - 右边
 let legend_left_value = ref("身高")//图例 - 左
 let legend_right_value = ref("体重")//图例 - 右
-let conf = new EchatConfig('高中二班女子身高体重',xAxis_data_value.value, yAxis_data_left_value.value, yAxis_data_right_value.value, legend_left_value.value, legend_right_value.value,'ml','斤')
+
+// 定义配置数据，用于页面初始化SSJHistogramView传参数、updateChat刷新传参数
+let conf = new SSJEchatConfig('数据加载中',xAxis_data_value.value,[yAxis_data_left_value.value,yAxis_data_right_value.value],[legend_left_value.value, legend_right_value.value],['ml','斤'])
 let histogram_config = ref(conf)
 
-// function fun1() {
-//   return new Promise((resolve, reject) => {
-//     try{
-//       console.log('这里写fun1的逻辑')
-//       resolve() //这个要实现
-//     }catch (e) {
-//       console.log('fun1异常逻辑')
-//       reject()
-//     }
-//   })
-// }
-//
-// function fun2() {
-//   return new Promise((resolve, reject) => {
-//     try{
-//       //用setTimeout模拟耗时操作，比如网络请求
-//       setTimeout(()=>{
-//         console.log('这里写fun2的逻辑')
-//         resolve() //这个要实现
-//       },2000)
-//
-//     }catch (e) {
-//       console.log('fun2异常逻辑')
-//       reject()
-//     }
-//   })
-// }
-
+//页面加载完执行
 onMounted(() => {
-
-  // Promise.all([fun1(), fun2()]).then(()=>{
-  //   //中括号里所有方法执行完后，会进入这里
-  //   console.log("中括号里所有方法执行完后，会进入这里")
-  // })
-
-
-
   //readXlsxFile执行完，再执行then语句块
   Promise.all([readXlsxFile()]).then(()=>{
-      console.log("开始二次渲染222")
+      console.log("xmsl数据读取完成，开始刷新图标")
       // 配置图表信息和展示数据，并调用updateChatCustom刷新图表
-      conf = new EchatConfig('高中二班女子身高体重',xAxis_data_value.value, yAxis_data_left_value.value, yAxis_data_right_value.value, legend_left_value.value, legend_right_value.value,'ml','斤')
-      console.log("xAxis_data_value.value---->"+xAxis_data_value.value)
-      doubleHistogram.value.updateChatCustom(conf);
+      conf = new SSJEchatConfig('高中二班女子身高体重',xAxis_data_value.value,[yAxis_data_left_value.value,yAxis_data_right_value.value],[legend_left_value.value, legend_right_value.value],['ml','斤'])
+      doubleHistogram.value.updateChat(conf);
     }
   )
-
-  // const promise = new Promise((resolve, reject) => {
-  //   console.log(1)
-  //   resolve()
-  //   console.log(2)
-  // })
-  //
-  // promise.then(() => {
-  //   console.log(3)
-  // })
-  //
-  // console.log(4)
-
 });
 
-// async function initMethod() {
-//   //readXlsxFile是异步方法，用来读取xlsx文件（内部在获取完数据后，会执行updateChatCustom来刷新图表）
-//  await readXlsxFile().then( ()=>{
-//    console.log("then执行")
-//  });
-//  //
-//   console.log("开始二次渲染111")
-//   // 配置图表信息和展示数据，并调用updateChatCustom刷新图表
-//   conf = new EchatConfig('高中二班女子身高体重',xAxis_data_value.value, yAxis_data_left_value.value, yAxis_data_right_value.value, legend_left_value.value, legend_right_value.value,'ml','斤')
-//   console.log("xAxis_data_value.value---->"+xAxis_data_value.value)
-//   doubleHistogram.value.updateChatCustom(conf);
-// }
-
-
-
-// function testMethod() {
-//   console.log("---A")
-//
-//   // await fun1('Tom').then(name => {
-//   //   console.log("---B")
-//   // })
-//   Promise.all([fun1()]).then(
-//       console.log(100)
-//   )
-//   // fun1('Tom').then(name => {
-//   //   console.log("---B")
-//   // })
-//
-//   console.log("---C")
-// }
-
-// function fun1(name){
-//   return new Promise((resolve, reject) => {
-//     setTimeout(()=>{
-//       console.log("---D")
-//       return name
-//     },1500)
-//     console.log("---E")
-//   })
-// }
 
 // 读取xlsx文件
 const XLSX = require('xlsx')
@@ -177,10 +93,6 @@ let contentValue = {}
 
        console.log("readXlsxFile执行完了")
        // console.log("开始二次渲染")
-       // // 配置图表信息和展示数据，并调用updateChatCustom刷新图表
-       // conf = new EchatConfig('高中二班女子身高体重',xAxis_data_value.value, yAxis_data_left_value.value, yAxis_data_right_value.value, legend_left_value.value, legend_right_value.value,'ml','斤')
-       // doubleHistogram.value.updateChatCustom(conf);
-
        resolve()
 
      }).catch(err => {
@@ -209,26 +121,4 @@ function formatExcelDate (numb, format = "-") {
   return year + (month < 10 ? '0' + month : month) + (date < 10 ? '0' + date : date)
 }
 
-
-
-
-
-
-
 </script>
-
-<template>
-<!--  <div ref="main" style="width: 100%; height: 400px"></div>-->
-  <div id="main" style="width: 600px;height:400px;">
-<!--    <DoubleHistogramView ref="doubleHistogram" :xAxis_data="xAxis_data_value"-->
-<!--                         :yAxis_data_left="yAxis_data_left_value"-->
-<!--                         :yAxis_data_right="yAxis_data_right_value"-->
-<!--                         :legend_left= "legend_left_value"-->
-<!--                         :legend_right="legend_right_value"></DoubleHistogramView>-->
-
-<!--    <DoubleHistogramView ref="doubleHistogram" :config="histogram_config"></DoubleHistogramView>-->
-    <DoubleHistogramView ref="doubleHistogram" :config="histogram_config"></DoubleHistogramView>
-
-  </div>
-</template>
-

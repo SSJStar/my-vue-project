@@ -11,12 +11,6 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Home')
-    // component: Home
-  },
-  {
-    path: '/homeView',
-    name: 'homeView',
     children:[
       {
         path: '/mainView',
@@ -29,6 +23,12 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/My')
       },
     ],
+    component: () => import(/* webpackChunkName: "about" */ '../views/Home')
+    // component: Home
+  },
+  {
+    path: '/homeView',
+    name: 'homeView',
     component: HomeView
   },
   {
@@ -56,13 +56,13 @@ const routes = [
     name: 'mainView',
     component: () => import(/* webpackChunkName: "about" */ '../views/MainView')
   },
-  {
+  {//xlsx文件的读取和导出
     path: '/xlsxView',
     name: 'xlsxView',
     component: () => import(/* webpackChunkName: "about" */ '../views/XlsxView')
   },
-  {//饼图
-    path: '/btChatView',
+  {//直方图
+      path: '/btChatView',
     name: 'btChatView',
     component: () => import(/* webpackChunkName: "about" */ '../views/BTChatView')
   },

@@ -295,8 +295,8 @@ function childSelectAction(index) {
  console.log('查询结果的title、index、上一层index：',resultItem.title,resultItem.index,resultItem.parent_id,)
 
   console.log("要跳转："+resultItem.page)
-  router.push(resultItem.page)
-
+  // router.push(resultItem.page)
+router.push("/home/myView")
 }
 
 /**
