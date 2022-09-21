@@ -23,6 +23,8 @@ app.use(ElementPlus)//全局注册ElementPlus
 //     console.log("This is hello method")
 // }
 
+app.config.globalProperties.$loginState = false//挂载全局静态变量对象$staticVars
+
 app.use(router).mount('#app')
 
 //全局注册组件 - GlobalView

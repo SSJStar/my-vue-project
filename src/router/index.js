@@ -32,6 +32,11 @@ const routes = [
   //   // component: Home
   // },
   {
+    path: '/loginView',
+    name: 'loginView',
+    component: import(/* webpackChunkName: "about" */ '../views/Login')
+  },
+  {
     path: '/homeView',
     name: 'homeView',
     component: HomeView

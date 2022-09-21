@@ -49,20 +49,27 @@
 <template>
 <!--  class="home"-->
   <div  id="app">
-    <div>
-      <HeadNav></HeadNav>
-    </div>
-    <div style="width: 100%;height: 100%;display: flex">
-      <div class="left">
-        <!--          <LeftMenu style="background-color: gray;  width: 200px;  height: 100%;" @change="childFoldAction" ref="leftmenuRef"></LeftMenu>-->
-        <LeftMenu @change="childFoldAction" @selected="childSelectAction" ref="leftmenuRef" v-bind:foldOn_width="foldOnW" v-bind:foldOff_width="foldOffW" v-bind:listJson="listJson"></LeftMenu>
+    <div id="mainModule">
+      <div>
+        <HeadNav></HeadNav>
       </div>
-      <div class="router-div">
-        <!--          <MainView></MainView>-->
-        <!--          <PersonInfoView></PersonInfoView>-->
-        <router-view/>
+      <div style="width: 100%;height: 100%;display: flex">
+        <div class="left">
+          <!--          <LeftMenu style="background-color: gray;  width: 200px;  height: 100%;" @change="childFoldAction" ref="leftmenuRef"></LeftMenu>-->
+          <LeftMenu @change="childFoldAction" @selected="childSelectAction" ref="leftmenuRef" v-bind:foldOn_width="foldOnW" v-bind:foldOff_width="foldOffW" v-bind:listJson="listJson"></LeftMenu>
+        </div>
+        <div class="router-div">
+          <!--          <MainView></MainView>-->
+          <!--          <PersonInfoView></PersonInfoView>-->
+          <router-view/>
+        </div>
       </div>
+
     </div>
+
+
+    <Login id="login" :hidden="loginPageHidden" style="width: 100%; height: 100%; position: absolute;"></Login>
+
   </div>
 </template>
 
@@ -87,9 +94,10 @@ export default {
 </script>
 
 <script setup>
-import {ref} from "vue";
+import {getCurrentInstance, onMounted, ref} from "vue";
 import staticVars from "@/statics/global";
 import router from "@/router";
+import Login from "@/views/Login"
 
 //菜单-展开宽度
 let foldOnW = staticVars.LEFTMENU_FOLDONW
@@ -151,6 +159,7 @@ const listJson = {
           parent_id: "1",
           iconName: "",
           title: "绍兴",
+          page:"/mainView",
           childrens: []
         },
         {
@@ -158,6 +167,7 @@ const listJson = {
           parent_id: "1",
           iconName: "",
           title: "宁波",
+          page:"/mainView",
           childrens: []
         },
         {
@@ -170,12 +180,14 @@ const listJson = {
             parent_id: "1-1",
             iconName: "",
             title: "温岭",
+            page:"/mainView",
             childrens: []
           }, {
             index: "1-4-2",
             parent_id: "1-1",
             iconName: "",
             title: "临海",
+            page:"/mainView",
             childrens: []
           },]
         },
@@ -194,13 +206,13 @@ const listJson = {
       iconName: require("/src/assets/home/icon-home.png"),
       parent_id: "0",
       title: "内蒙",
-      page:"/page3",
       childrens: [
         {
           index: "3-1",
           parent_id: "3",
           iconName: "",
           title: "呼和浩特",
+          page:"/mainView",
           childrens: []
         },
         {
@@ -208,6 +220,7 @@ const listJson = {
           parent_id: "3",
           iconName: "",
           title: "包头",
+          page:"/mainView",
           childrens: []
         },
         {
@@ -221,6 +234,7 @@ const listJson = {
               parent_id: "3-3",
               iconName: "",
               title: "乌海市博物馆",
+              page:"/mainView",
               childrens: []
             },
             {
@@ -228,6 +242,7 @@ const listJson = {
               parent_id: "3-3",
               iconName: "",
               title: "黄河西行客栈",
+              page:"/mainView",
               childrens: []
             }
           ]
@@ -236,6 +251,19 @@ const listJson = {
 
   ]
 }
+
+let loginPageHidden = ref(true) //默认隐藏
+
+//页面加载完执行
+onMounted(() => {
+  // console.log("请先登录")
+  // loginPageHidden.value = false
+
+  const loginState = getCurrentInstance().appContext.config.globalProperties.$loginState
+  loginPageHidden.value = loginState
+
+  console.log("请先登录---" + loginState)
+})
 
 /**
  * LeftMenu组件折叠动作，会给当前组件发送change指令，最终会调用这个方法
@@ -287,8 +315,9 @@ function childSelectAction(index) {
 
   console.log("要跳转："+resultItem.page)
   if (resultItem.page !== undefined) {
-    router.push(resultItem.page)
+    router.push(resultItem.page + `?title=${resultItem.title}`)
     // router.push("/myView")
+    // console.log("sssss---"+ resultItem.page + `?title=${resultItem.title}`)
   }else{
     console.log("page字段内容为空，跳转失败")
   }
@@ -312,17 +341,21 @@ function useChildMehtod(){
 <style>
 
 #app{
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  position: absolute;/*不加这句，高度不能铺满*/
-
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
+
+#mainModule {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;/*不加这句，高度不能铺满*/
+  /*display: flex;*/
+}
+
 
 .left {
   background-color: white;

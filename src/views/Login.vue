@@ -82,8 +82,12 @@ let identifyCode = ref('3212')//当前随机数，初始值为3212
 
 // let codeInputRef = ref(null)
 
+const proxy  = getCurrentInstance().appContext;
 //登录按钮 - 点击
 function loginActionFunc() {
+
+  proxy.config.globalProperties.$loginState = true
+
   router.replace("/home")
   return
 
