@@ -70,6 +70,9 @@
 
     <Login id="login" :hidden="loginPageHidden" @closePage="closeLogin" style="width: 100%; height: 100%; position: absolute;"></Login>
 
+<!--    <el-button @click="open" style="width: 100px;height: 50px;background: #42b983">打开</el-button>-->
+<!--    <Child v-model:visible="flag" style=" position: absolute; background: white;"></Child>-->
+
   </div>
 </template>
 
@@ -98,6 +101,13 @@ import {getCurrentInstance, onMounted, ref} from "vue";
 import staticVars from "@/statics/global";
 import router from "@/router";
 import Login from "@/views/Login"
+
+import Child from "@/components/Child.vue"
+
+// const flag = ref(false)
+// const open = () => {
+//   flag.value = true
+// }
 
 //菜单-展开宽度
 let foldOnW = staticVars.LEFTMENU_FOLDONW
@@ -248,7 +258,53 @@ const listJson = {
           ]
         },]
     },
-
+    {
+      index: "4",
+      iconName: require("/src/assets/home/icon-home.png"),
+      parent_id: "0",
+      title: "功能展示",
+      childrens: [
+        {
+          index: "4-1",
+          parent_id: "4",
+          iconName: "",
+          title: "xlsx解析和导出",
+          page:"/xlsxView",
+          childrens: []
+        },
+        {
+          index: "4-2",
+          parent_id: "4",
+          iconName: "",
+          title: "双重直方图",
+          page:"/btChatView",
+          childrens: []
+        },
+        {
+          index: "4-3",
+          parent_id: "4",
+          iconName: "",
+          title: "其它",
+          childrens: [
+            {
+              index: "4-3-1",
+              parent_id: "4-3",
+              iconName: "",
+              title: "弹窗",
+              page:"/test",
+              childrens: []
+            },
+            // {
+            //   index: "4-3-2",
+            //   parent_id: "3-3",
+            //   iconName: "",
+            //   title: "黄河西行客栈",
+            //   page:"/mainView",
+            //   childrens: []
+            // }
+          ]
+        },]
+    },
   ]
 }
 

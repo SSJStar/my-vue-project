@@ -87,6 +87,7 @@ function created() {
 
 //将contentValue这个json变量，写入xlsx文件
 const ExportXlsx = () => {
+
   // 创建工作表
   // const data = XLSX.utils.json_to_sheet(tableData)
   const data = XLSX.utils.json_to_sheet(contentValue)
