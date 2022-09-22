@@ -75,6 +75,7 @@ let loginInput = {
   codeInputValue: ''
 }
 
+const emit = defineEmits(['closePage'])
 
 // 图形验证码
 let identifyCodes = "1234567890abcdefghijklmnopqrstuvwxyz"//随机数-数据源
@@ -88,7 +89,9 @@ function loginActionFunc() {
 
   proxy.config.globalProperties.$loginState = true
 
-  router.replace("/home")
+  // router.replace("/home")
+  //告诉调用者，可以关闭当前页面来
+  emit("closePage")
   return
 
 

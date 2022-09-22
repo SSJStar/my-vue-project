@@ -68,7 +68,7 @@
     </div>
 
 
-    <Login id="login" :hidden="loginPageHidden" style="width: 100%; height: 100%; position: absolute;"></Login>
+    <Login id="login" :hidden="loginPageHidden" @closePage="closeLogin" style="width: 100%; height: 100%; position: absolute;"></Login>
 
   </div>
 </template>
@@ -334,6 +334,15 @@ function childSelectAction(index) {
 function useChildMehtod(){
   // 调用LeftMenu组件的pubMethod方法，并传入参数 "外部参数12"
   leftmenuRef.value.pubMethod("外部参数123")
+}
+
+let pageContext = getCurrentInstance().appContext
+//定义方法，并暴露给外界调用
+// 调用此方法来隐藏登录界面
+function closeLogin(){
+  const loginState = pageContext.config.globalProperties.$loginState
+  loginPageHidden.value = loginState
+  console.log("登录关闭:"+loginState)
 }
 
 </script>
