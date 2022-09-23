@@ -71,7 +71,9 @@
     <Login id="login" :hidden="loginPageHidden" @closePage="closeLogin" style="width: 100%; height: 100%; position: absolute;"></Login>
 
 <!--    <el-button @click="open" style="width: 100px;height: 50px;background: #42b983">打开</el-button>-->
-<!--    <Child v-model:visible="flag" style=" position: absolute; background: white;"></Child>-->
+<!--    <Child style=" width: 100%; height: 100%;position: absolute; background: white;"></Child>-->
+
+    <SSJDialog ref="dialogRef"></SSJDialog>
 
   </div>
 </template>
@@ -97,17 +99,23 @@ export default {
 </script>
 
 <script setup>
-import {getCurrentInstance, onMounted, ref} from "vue";
+import {getCurrentInstance, onMounted, provide, ref} from "vue";
 import staticVars from "@/statics/global";
 import router from "@/router";
 import Login from "@/views/Login"
-
+import SSJDialog from "@/components/SSJDialog" //弹窗
 import Child from "@/components/Child.vue"
 
-// const flag = ref(false)
-// const open = () => {
-//   flag.value = true
-// }
+let dialogRef = ref(null)
+function showSSJDialog(title, subTitle) {
+  console.log("showSSJDialog~~")
+  // dialogRef.value.show(true, "正在导出文件", "文件名")
+  dialogRef.value.show(true, title, subTitle)
+}
+
+//用provide声明这个方法，子组件可以通过inject来访问，哪怕这两个组件直接隔了n层，有点像iOS里的「通知」
+provide("showSSJDialogKEY",showSSJDialog)
+
 
 //菜单-展开宽度
 let foldOnW = staticVars.LEFTMENU_FOLDONW
@@ -434,7 +442,7 @@ function closeLogin(){
   /*width: v-bind(100% - leftMenuWidth);*/
   flex: 1;
   height: calc(100% - 71px);
-  background-color: gray;
+  background-color: white;
   /*position: relative;*/
 }
 

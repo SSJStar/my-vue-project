@@ -5,11 +5,81 @@
 </div>
 </template>
 
+
+
+<!--<script setup lang="ts">-->
+<!--function dd(){-->
+<!--  console.log("This is dd.")-->
+<!--}-->
+
+<!--const { proxy }: any = getCurrentInstance();-->
+<!-- class OperateStepsPage {-->
+<!--   private static jsUse: OperateStepsPage;-->
+<!--   private operateStepsPage: OperateStepsPage | undefined;-->
+
+<!--   // constructor(-->
+<!--   //     public alertController: AlertController,-->
+<!--   //     public activatedRoute: ActivatedRoute,-->
+<!--   //     public router: Router,-->
+<!--   //     public eventService: EventService,-->
+<!--   // )-->
+
+<!--   public init() {   // 做一个全局注册-->
+<!--     OperateStepsPage.jsUse = this;-->
+<!--     // 若下面window['operateStepsPage']提示：object access via string literals is disallowed（不允许通过字符串文本访问对象），可先定义再访问-->
+<!--     // 若不提示错误，可省略定义：const operateStepsPage= 'operateStepsPage';直接window['operateStepsPage']-->
+<!--     const operateStepsPage = 'operateStepsPage';-->
+<!--     window['operateStepsPage'] = OperateStepsPage.jsUse;-->
+<!--   }-->
+
+<!--  public aa() {-->
+<!--    console.log("This is aa.")-->
+<!--    // proxy.$subDialog({-->
+<!--    //   title: "title",-->
+<!--    //   width: "550px",-->
+<!--    //   option: {-->
+<!--    //-->
+<!--    //   },-->
+<!--    //   cancelClick: () => {},-->
+<!--    //   saveClick: async (val: any) => {-->
+<!--    //     console.log(val)-->
+<!--    //   },-->
+<!--    // });-->
+<!--  }-->
+<!--}-->
+
+
+
+<!--</script>-->
+
+<!--<script setup>-->
+
+<!--// import {getCurrentInstance} from "vue";-->
+<!--// const currentInstance = getCurrentInstance()-->
+<!--// const { proxy }: any = getCurrentInstance();-->
+
+<!--// function bb() {-->
+<!--//   console.log("This is bb.")-->
+<!--//   require(this.aa())-->
+<!--// }-->
+
+
+<!--</script>-->
+
+
+
+
+
+
 <script setup>
 
 import axios from 'axios';
 const XLSX = require('xlsx')
-import transformSheets from './read_xlsx';    //导入转制函数
+import transformSheets from './read_xlsx';
+import {inject} from "vue";    //导入转制函数
+
+// let emit = defineEmits("showSSJDialog")
+
 
 let contentValue = {}
 
@@ -85,8 +155,38 @@ function created() {
 //   },
 // ])
 
+// const currentInstance = getCurrentInstance()
+// const { proxy }: any = getCurrentInstance();
+
+//接收父组件showSSJDialogKEY对应的函数
+const injectMessage = inject("showSSJDialogKEY")
+
+
+
 //将contentValue这个json变量，写入xlsx文件
 const ExportXlsx = () => {
+  // currentInstance.proxy.$forceUpdate()
+
+  // currentInstance.proxy.$ssjDialog()
+  // currentInstance.proxy.$ssjDialog({
+  //   title: "title",
+  //   width: "550px",
+  //   option: {
+  //
+  //   },
+  //   cancelClick: () => {},
+  //   saveClick: async (val) => {
+  //     console.log(val)
+  //   },
+  // });
+
+  // this.aa()
+
+
+
+  injectMessage("正在导出文件", "文件名")
+
+  return
 
   // 创建工作表
   // const data = XLSX.utils.json_to_sheet(tableData)
