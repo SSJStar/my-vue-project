@@ -126,8 +126,16 @@ function loginActionFunc() {
   }
 }
 
+
 //注册按钮-点击
 function registerActionFunc(){
+
+
+
+
+
+  return
+
   alert("注册模块，还没开始写")
 
   getRegisterCode({"username":loginInput.nameValue}).then(

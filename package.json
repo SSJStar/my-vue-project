@@ -12,6 +12,7 @@
     "core-js": "^3.8.3",
     "echarts": "^5.3.3",
     "element-plus": "^2.2.13",
+    "sass-loader": "^13.0.2",
     "ts-loader": "^9.4.1",
     "vform3-builds": "^3.0.8",
     "vue": "^3.2.13",
