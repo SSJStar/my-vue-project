@@ -15,7 +15,7 @@ import type { App, Component, ComputedOptions, MethodOptions } from "vue";
 import type { DialogProps } from "element-plus";
 
 export type OverlayType = {
-    // component: Component<any, any, any, ComputedOptions, MethodOptions>;
+    component: Component<any, any, any, ComputedOptions, MethodOptions>;
     options?: Partial<DialogProps>;
     params?: any;
 };
@@ -92,11 +92,11 @@ export class OverlayService {
     //打开弹窗的方法 返回promsie
     public open(overlay: OverlayType) {
 
-        // const { component, params, options } = overlay;
-        // this.childrenComponent = component;
+        const { component, params, options } = overlay;
+        this.childrenComponent = component;
 
         //改成
-        const { params, options } = overlay;
+        // const { params, options } = overlay;
 
         this.params = params;
         if (options) {``

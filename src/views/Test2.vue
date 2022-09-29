@@ -6,12 +6,14 @@
 <script lang="ts" setup>
 import ChildDemo from "@/components/t1/ChildDemo.vue";
 import { useDialog } from "@/components/t1/useDialog";
+import {Component, defineComponent } from "vue";
 
 const { open } = useDialog();
 
+
 const openDemo = () => {
   open({
-    // component: ChildDemo,
+    component: ChildDemo,
     options: { title: "弹窗demo" },
     params:{abc:'1'}
   }).then((msg: any)=>{
