@@ -1,15 +1,12 @@
 <template>
-  <button @click="openDemo" >打开弹窗11</button>
-<!--  <ChildDemo></ChildDemo>-->
+  <button @click="openDemo" >打开弹窗</button>
 </template>
 
 <script lang="ts" setup>
-import ChildDemo from "@/components/t1/ChildDemo.vue";
-import { useDialog } from "@/components/t1/useDialog";
-import {Component, defineComponent } from "vue";
+import ChildDemo from "@/components/servicedialog/ChildDemo.vue";
+import { useDialog } from "@/components/servicedialog/useDialog";
 
 const { open } = useDialog();
-
 
 const openDemo = () => {
   open({
@@ -17,7 +14,9 @@ const openDemo = () => {
     options: { title: "弹窗demo" },
     params:{abc:'1'}
   }).then((msg: any)=>{
-    console.log('关闭弹窗触发',msg)
+    console.log('关闭后得到值：',msg)
   });
 };
+
+
 </script>

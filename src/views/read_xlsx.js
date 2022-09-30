@@ -1,3 +1,4 @@
+// declare function transformSheets(sheets?:any): void;
 const XLSX = require('xlsx')
 //将行,列转换
 function transformSheets(sheets) {

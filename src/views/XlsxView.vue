@@ -71,12 +71,19 @@
 
 
 
-<script setup>
+<script setup lang="ts">
 
 import axios from 'axios';
 const XLSX = require('xlsx')
-import transformSheets from './read_xlsx';
-import {inject} from "vue";    //导入转制函数
+// import transformSheets from '@/views/read_xlsx';
+// import {inject, reactive} from "vue";    //导入转制函数
+
+const transformSheets:any = require('./read_xlsx')
+
+
+// 弹窗需要用到useDialog跟自定义组件ChildDemo
+import ChildDemo from "@/components/servicedialog/ChildDemo.vue";
+import { useDialog } from "@/components/servicedialog/useDialog";
 
 // let emit = defineEmits("showSSJDialog")
 
@@ -96,10 +103,20 @@ function created() {
     console.log(content);
     let list = [];
     let arr = content.slice(1);
+
+    interface Obj {
+      [key: string]: string |number
+    }
     for (let i = 0; i < arr.length; i++) {
-      let obj = {};
-      arr[i].forEach((item, index) => {
-        obj['data'+(index+1)] = item;
+
+
+      let obj:Obj = {};
+      arr[i].forEach((item: any, index: number) => {
+
+        // let key:keyof Obj = ""
+        let key = String('data')+String(index+1)
+        // type fromkey = key
+        obj[key] = item;
         if(index + 1 == 9){
           // obj['data'+(index+1)] = this.formatExcelDate(item);
           obj['data'+(index+1)] = formatExcelDate(item);
@@ -116,7 +133,7 @@ function created() {
   })
 }
   // 处理表格中的日期时间
-  function formatExcelDate (numb, format = "-") {
+  function formatExcelDate (numb: number, format = "-") {
     // 如果numb为空则返回空字符串
     if (!numb) {
       return "";
@@ -126,65 +143,23 @@ function created() {
     const month = time.getMonth() + 1 + '';
     const date = time.getDate();
     if (format && format.length === 1) {
-      return year + format + (month < 10 ? '0' + month : month) + format + (date < 10 ? '0' + date : date)
+      return year + format + (Number(month) < 10 ? '0' + month : month) + format + (date < 10 ? '0' + date : date)
     }
-    return year + (month < 10 ? '0' + month : month) + (date < 10 ? '0' + date : date)
+    return year + (Number(month) < 10 ? '0' + month : month) + (date < 10 ? '0' + date : date)
   }
 
 
-// const tableData = ([
-//   {
-//     date: "2016-05-02",
-//     name: "王小虎",
-//     address: "上海市普陀区金沙江路 1518 弄",
-//   },
-//   {
-//     date: "2016-05-04",
-//     name: "王小虎",
-//     address: "上海市普陀区金沙江路 1517 弄",
-//   },
-//   {
-//     date: "2016-05-01",
-//     name: "王小虎",
-//     address: "上海市普陀区金沙江路 1519 弄",
-//   },
-//   {
-//     date: "2016-05-03",
-//     name: "王小虎",
-//     address: "上海市普陀区金沙江路 1516 弄",
-//   },
-// ])
-
-// const currentInstance = getCurrentInstance()
-// const { proxy }: any = getCurrentInstance();
-
-//接收父组件showSSJDialogKEY对应的函数
-const injectMessage = inject("showSSJDialogKEY")
-
-
-
+const { open } = useDialog();
 //将contentValue这个json变量，写入xlsx文件
 const ExportXlsx = () => {
-  // currentInstance.proxy.$forceUpdate()
 
-  // currentInstance.proxy.$ssjDialog()
-  // currentInstance.proxy.$ssjDialog({
-  //   title: "title",
-  //   width: "550px",
-  //   option: {
-  //
-  //   },
-  //   cancelClick: () => {},
-  //   saveClick: async (val) => {
-  //     console.log(val)
-  //   },
-  // });
-
-  // this.aa()
-
-
-
-  injectMessage("正在导出文件", "文件名")
+  open({
+    component: ChildDemo,
+    options: { title: "正在导出" },
+    params:{title:'导出中',subTitle:"文件名"}
+  }).then((msg: any)=>{
+    console.log('关闭后得到值：',msg)
+  });
 
   return
 

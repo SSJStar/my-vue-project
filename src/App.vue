@@ -73,7 +73,7 @@
 <!--    <el-button @click="open" style="width: 100px;height: 50px;background: #42b983">打开</el-button>-->
 <!--    <Child style=" width: 100%; height: 100%;position: absolute; background: white;"></Child>-->
 
-    <SSJDialog ref="dialogRef"></SSJDialog>
+<!--    <SSJDialog ref="dialogRef"></SSJDialog>-->
 
   </div>
 </template>

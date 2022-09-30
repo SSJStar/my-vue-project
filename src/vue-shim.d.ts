@@ -11,3 +11,5 @@ declare module "*.vue" {
     // @ts-ignore
     export default {Vue,Component};
 }
+
+declare module '@/views/read_xlsx.js'

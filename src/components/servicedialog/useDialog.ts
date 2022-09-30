@@ -119,8 +119,10 @@ export class OverlayService {
         this.show.value = false;
         if (msg) {
             this._resolve(msg);
+            console.log("111:"+msg)
         } else {
             this._resolve();
+            console.log("222:"+msg)
         }
     }
 }
